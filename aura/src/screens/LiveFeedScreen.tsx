@@ -37,14 +37,14 @@ import { COLORS, SPACING, RADIUS, FONT_SIZE, FONT_WEIGHT } from '../theme';
 import { timeAgo } from '../utils/time';
 import type { LiveSignalDoc } from '../services/events';
 
-// ── Types ─────────────────────────────────────────────────────────────────────
+// Types
 
 interface FeedItem {
   signal:    LiveSignalDoc;
   venueName: string;
 }
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
+// Helpers
 
 const { width: SW, height: SH } = Dimensions.get('window');
 
@@ -54,7 +54,7 @@ const VIBE_LABEL: Record<string, { emoji: string; label: string; color: string }
   slow: { emoji: '😴', label: 'Slow', color: '#9ca3af' },
 };
 
-// ── Root screen ───────────────────────────────────────────────────────────────
+// Root screen
 
 interface Props {
   onNavigate: (venueId: string, venueName: string) => void;
@@ -148,7 +148,7 @@ export function LiveFeedScreen({ onNavigate }: Props) {
 
   const viewabilityConfig = useRef({ itemVisiblePercentThreshold: 60 }).current;
 
-  // ── Render ─────────────────────────────────────────────────────────────────
+  // Render
 
   if (loading) {
     return (
@@ -161,7 +161,7 @@ export function LiveFeedScreen({ onNavigate }: Props) {
 
   const noResults = displayItems.length === 0;
 
-  // ── Feed ───────────────────────────────────────────────────────────────────
+  // Feed
 
   return (
     <View
@@ -233,7 +233,7 @@ export function LiveFeedScreen({ onNavigate }: Props) {
   );
 }
 
-// ── Reel card ─────────────────────────────────────────────────────────────────
+// Reel card
 
 interface ReelCardProps {
   item:       FeedItem;
@@ -294,7 +294,7 @@ const ReelCard = React.memo(function ReelCard({ item, isActive, itemH, onNavigat
 
   return (
     <View style={[s.reel, { height: itemH }]}>
-      {/* ── Video / poster ──────────────────────────────────────────────── */}
+      {/* Video / poster */}
       <Pressable style={StyleSheet.absoluteFill} onPress={handleTap}>
         {/* Always render thumbnail first as background so there's never a black frame */}
         {signal.thumbnailUrl ? (
@@ -333,7 +333,7 @@ const ReelCard = React.memo(function ReelCard({ item, isActive, itemH, onNavigat
         )}
       </Pressable>
 
-      {/* ── LIVE badge ──────────────────────────────────────────────────── */}
+      {/* LIVE badge */}
       <View style={s.liveBadge}>
         <View style={s.liveDot} />
         <Text style={s.liveText}>LIVE</Text>
@@ -347,7 +347,7 @@ const ReelCard = React.memo(function ReelCard({ item, isActive, itemH, onNavigat
         </View>
       )}
 
-      {/* ── Right action rail ────────────────────────────────────────────── */}
+      {/* Right action rail */}
       <View style={[s.rail, { bottom: 100 }]}>
 
         {/* Like */}
@@ -377,7 +377,7 @@ const ReelCard = React.memo(function ReelCard({ item, isActive, itemH, onNavigat
         </Pressable>
       </View>
 
-      {/* ── Bottom info overlay ──────────────────────────────────────────── */}
+      {/* Bottom info overlay */}
       <View style={s.bottomInfo}>
 
         {/* Venue name */}
@@ -440,7 +440,7 @@ const ReelCard = React.memo(function ReelCard({ item, isActive, itemH, onNavigat
   );
 });
 
-// ── Styles ────────────────────────────────────────────────────────────────────
+// Styles
 
 const s = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#000' },

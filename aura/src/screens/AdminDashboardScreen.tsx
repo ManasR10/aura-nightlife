@@ -54,7 +54,7 @@ export function AdminDashboardScreen({ navigation }: Props) {
     if (venues.length > 0 && selectedIdx >= venues.length) setSelectedIdx(0);
   }, [venues.length, selectedIdx]);
 
-  // ── Empty / loading / error states ───────────────────────────────────────
+  // Empty / loading / error states
 
   if (loadingVenues) {
     return (

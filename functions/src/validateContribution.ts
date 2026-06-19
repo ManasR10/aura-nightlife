@@ -70,7 +70,7 @@ export const validateContribution = onCall(async (request) => {
   const uid = request.auth.uid;
   const db  = getFirestore();
 
-  // ── 1. Geofence ────────────────────────────────────────────────────────────
+  // 1. Geofence
   const venueSnap = await db.collection('venues').doc(venueId).get();
   if (!venueSnap.exists) throw new HttpsError('not-found', 'Venue not found.');
 
@@ -85,7 +85,7 @@ export const validateContribution = onCall(async (request) => {
     );
   }
 
-  // ── 2. Daily rate-limit ────────────────────────────────────────────────────
+  // 2. Daily rate-limit
   const todayStart = new Date();
   todayStart.setHours(0, 0, 0, 0);
 
@@ -99,7 +99,7 @@ export const validateContribution = onCall(async (request) => {
     throw new HttpsError('resource-exhausted', `Daily limit of ${MAX_PER_DAY} check-ins reached. Come back tomorrow!`);
   }
 
-  // ── 3. Per-venue nightly limit (8 PM → now) ────────────────────────────────
+  // 3. Per-venue nightly limit (8 PM → now)
   const nightStart = new Date();
   nightStart.setHours(20, 0, 0, 0);
   if (new Date() < nightStart) {
@@ -118,7 +118,7 @@ export const validateContribution = onCall(async (request) => {
     throw new HttpsError('resource-exhausted', `You've already checked in here ${MAX_PER_VENUE} times tonight.`);
   }
 
-  // ── 4. Atomic write: checkin + reward ──────────────────────────────────────
+  // 4. Atomic write: checkin + reward
   const checkinRef = db.collection('checkins').doc();
   const rewardRef  = db.collection('rewards').doc();
   const now        = FieldValue.serverTimestamp();

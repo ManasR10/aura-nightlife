@@ -63,7 +63,7 @@ export const scrapeTonightEvents = onSchedule(
       return;
     }
 
-    // ── 1. Scrape all sources in parallel ───────────────────────────────────
+    // 1. Scrape all sources in parallel
     // Primary sources: BMS + District
     // Official APIs: Eventbrite + Ticketmaster (graceful skip if no token)
     // Fallback: Insider + Timeout
@@ -98,7 +98,7 @@ export const scrapeTonightEvents = onSchedule(
       saveRawEvents('timeout',      timeoutEvents,     timeoutRaw.status     === 'rejected' ? String(timeoutRaw.reason)     : null),
     ]);
 
-    // ── 2. Normalize ────────────────────────────────────────────────────────
+    // 2. Normalize
     const allRaw = [
       ...bmsEvents,
       ...districtEvents,
@@ -115,11 +115,11 @@ export const scrapeTonightEvents = onSchedule(
     }
     console.log(`Normalized: ${normalized.length}`);
 
-    // ── 3. Deduplicate ──────────────────────────────────────────────────────
+    // 3. Deduplicate
     const deduped = dedupeEvents(normalized);
     console.log(`After dedupe: ${deduped.length}`);
 
-    // ── 4. Match venues (concurrency 5) ─────────────────────────────────────
+    // 4. Match venues (concurrency 5)
     const CONCURRENCY = 5;
     const results: Array<{
       normalized: NormalizedEvent;
@@ -144,11 +144,11 @@ export const scrapeTonightEvents = onSchedule(
     const matchedCount = results.filter((r) => r.venueId !== null).length;
     console.log(`Matched: ${matchedCount}/${results.length}`);
 
-    // ── 5. Publish to Firestore ─────────────────────────────────────────────
+    // 5. Publish to Firestore
     const { written } = await publishEvents(results);
     console.log(`Published: ${written} events`);
 
-    // ── 6. Expire old ended events ──────────────────────────────────────────
+    // 6. Expire old ended events
     const expired = await expireEndedEvents();
     console.log(`Expired: ${expired} ended events`);
   },

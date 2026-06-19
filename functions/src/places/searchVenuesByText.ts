@@ -90,7 +90,7 @@ export const searchVenuesByText = onCall(
     const db = getFirestore();
     const q  = query.trim().toLowerCase();
 
-    // ── 1. Firestore catalogue search ─────────────────────────────────────────
+    // 1. Firestore catalogue search
     // Scan up to 200 docs server-side and filter by substring match.
     // Fast enough for <300 venue catalogues; revisit with Algolia if >5 k venues.
     const catalogueSnap = await db.collection('venues').limit(200).get();
@@ -107,7 +107,7 @@ export const searchVenuesByText = onCall(
       return { venues: catalogueHits.slice(0, maxResults), source: 'catalogue' };
     }
 
-    // ── 2. Places API fallback ────────────────────────────────────────────────
+    // 2. Places API fallback
     const apiKey = process.env.PLACES_API_KEY;
     if (!apiKey) {
       return { venues: catalogueHits, source: 'catalogue_partial' };
@@ -144,12 +144,12 @@ export const searchVenuesByText = onCall(
     const data   = await response.json() as { places?: PlacesApiPlace[] };
     const places = data.places ?? [];
 
-    // ── 3. Upsert new results into /venues (grows catalogue organically) ──────
+    // 3. Upsert new results into /venues (grows catalogue organically)
     const catalogueIds = new Set(catalogueHits.map((v) => v.placeId));
     const newPlaces    = places.filter((p) => !catalogueIds.has(p.id));
     await Promise.all(newPlaces.map((p) => upsertVenueFromPlace(p)));
 
-    // ── 4. Merge: catalogue hits first, new Places results appended ───────────
+    // 4. Merge: catalogue hits first, new Places results appended
     const placesVenues = newPlaces.map((p) => ({
       placeId:            p.id,
       name:               p.displayName?.text ?? '',

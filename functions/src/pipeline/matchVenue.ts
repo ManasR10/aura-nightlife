@@ -18,7 +18,7 @@ const PLACES_TEXT_SEARCH = 'https://places.googleapis.com/v1/places:searchText';
 const GEOCODE_API = 'https://maps.googleapis.com/maps/api/geocode/json';
 const CONFIDENCE_THRESHOLD = 0.80;
 
-// ── Name normalization ────────────────────────────────────────────────────────
+// Name normalization
 
 const STOP_WORDS = new Set([
   'the', 'a', 'an', 'bar', 'club', 'lounge', 'cafe', 'pub', 'restaurant',
@@ -35,7 +35,7 @@ function normalizeName(name: string): string {
     .trim();
 }
 
-// ── String similarity (simple token overlap) ──────────────────────────────────
+// String similarity (simple token overlap)
 
 function tokenSimilarity(a: string, b: string): number {
   const ta = new Set(normalizeName(a).split(' ').filter(Boolean));
@@ -48,7 +48,7 @@ function tokenSimilarity(a: string, b: string): number {
   return (2 * overlap) / (ta.size + tb.size);
 }
 
-// ── Haversine distance in metres ──────────────────────────────────────────────
+// Haversine distance in metres
 
 function distanceMetres(
   lat1: number, lng1: number,
@@ -65,7 +65,7 @@ function distanceMetres(
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-// ── Main matcher ──────────────────────────────────────────────────────────────
+// Main matcher
 
 export interface MatchResult {
   venueId: string | null;
@@ -82,7 +82,7 @@ export async function matchVenue(
   const venuesSnap = await db.collection('venues').get();
   const venues = venuesSnap.docs.map((d) => d.data() as VenueDoc);
 
-  // ── Step 1: Exact normalized name ─────────────────────────────────────────
+  // Step 1: Exact normalized name
   const normQuery = normalizeName(event.rawVenueName);
   for (const venue of venues) {
     if (normalizeName(venue.name) === normQuery && normQuery.length > 3) {
@@ -90,7 +90,7 @@ export async function matchVenue(
     }
   }
 
-  // ── Step 2: Fuzzy name + locality ─────────────────────────────────────────
+  // Step 2: Fuzzy name + locality
   let bestFuzzy: { venue: VenueDoc; score: number } | null = null;
   for (const venue of venues) {
     const nameSim = tokenSimilarity(event.rawVenueName, venue.name);
@@ -109,7 +109,7 @@ export async function matchVenue(
     return { venueId: bestFuzzy.venue.placeId, confidenceScore: bestFuzzy.score };
   }
 
-  // ── Step 3: Geocode address → nearest cached venue ────────────────────────
+  // Step 3: Geocode address → nearest cached venue
   if (event.rawAddress) {
     try {
       const geoRes = await fetch(
@@ -148,7 +148,7 @@ export async function matchVenue(
     }
   }
 
-  // ── Step 4: Places text search ────────────────────────────────────────────
+  // Step 4: Places text search
   try {
     const searchQuery = event.locality
       ? `${event.rawVenueName} ${event.locality} Mumbai`

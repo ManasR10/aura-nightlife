@@ -216,7 +216,7 @@ async function scrapeInsiderHtmlPage(url: string): Promise<RawScrapedEvent[]> {
 
     const html = await res.text();
 
-    // ── 1. Extract __NEXT_DATA__ (primary — Insider uses Next.js) ────────────
+    // 1. Extract __NEXT_DATA__ (primary — Insider uses Next.js)
     const nextDataMatch = /__NEXT_DATA__\s*=\s*({[\s\S]*?})<\/script>/i.exec(html);
     if (nextDataMatch) {
       try {
@@ -235,7 +235,7 @@ async function scrapeInsiderHtmlPage(url: string): Promise<RawScrapedEvent[]> {
       console.log(`Insider: no __NEXT_DATA__ found on ${url}`);
     }
 
-    // ── 2. JSON-LD fallback ──────────────────────────────────────────────────
+    // 2. JSON-LD fallback
     const jsonLdRegex = /<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi;
     let match: RegExpExecArray | null;
 

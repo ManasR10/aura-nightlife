@@ -27,7 +27,7 @@ import type { RootStackParamList } from '../types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'AdminRewards'>;
 
-// ── Constants ─────────────────────────────────────────────────────────────────
+// Constants
 
 const EMOJI_OPTIONS = ['🍸', '🎟️', '💸', '🍕', '🎉', '🌟', '🎁', '🍻', '🥂', '🎶'];
 
@@ -40,7 +40,7 @@ const TYPE_OPTIONS: Array<{ id: string; label: string; isCash: boolean }> = [
   { id: 'points',     label: '⭐ Points',       isCash: false },
 ];
 
-// ── Types ─────────────────────────────────────────────────────────────────────
+// Types
 
 interface ActiveReward {
   rewardId:          string;
@@ -69,7 +69,7 @@ interface RewardStats {
   capsRemaining:  number;
 }
 
-// ── Screen ────────────────────────────────────────────────────────────────────
+// Screen
 
 export function AdminRewardsScreen({ route, navigation }: Props) {
   const insets = useSafeAreaInsets();
@@ -104,7 +104,7 @@ export function AdminRewardsScreen({ route, navigation }: Props) {
   const [redeeming,    setRedeeming]    = useState(false);
   const [redeemResult, setRedeemResult] = useState<{ success: boolean; message: string } | null>(null);
 
-  // ── Load ───────────────────────────────────────────────────────────────────
+  // Load
 
   useEffect(() => {
     let cancelled = false;
@@ -178,7 +178,7 @@ export function AdminRewardsScreen({ route, navigation }: Props) {
     return () => { cancelled = true; };
   }, [venueId]);
 
-  // ── Handlers ──────────────────────────────────────────────────────────────
+  // Handlers
 
   async function handleSaveReward() {
     if (!title.trim() || !value.trim()) {
@@ -268,7 +268,7 @@ export function AdminRewardsScreen({ route, navigation }: Props) {
     } finally { setRedeeming(false); }
   }
 
-  // ── Render ─────────────────────────────────────────────────────────────────
+  // Render
 
   if (loading) {
     return (
@@ -319,7 +319,7 @@ export function AdminRewardsScreen({ route, navigation }: Props) {
         keyboardShouldPersistTaps="handled"
       >
 
-        {/* ── REWARD TAB ──────────────────────────────────────────────────── */}
+        {/* REWARD TAB */}
         {tab === 'reward' && (
           <>
             {/* Active reward card */}
@@ -563,7 +563,7 @@ export function AdminRewardsScreen({ route, navigation }: Props) {
           </>
         )}
 
-        {/* ── VERIFY TAB ──────────────────────────────────────────────────── */}
+        {/* VERIFY TAB */}
         {tab === 'verify' && (
           <>
             <View style={s.redeemCard}>
@@ -637,7 +637,7 @@ export function AdminRewardsScreen({ route, navigation }: Props) {
   );
 }
 
-// ── Sub-components ─────────────────────────────────────────────────────────────
+// Sub-components
 
 function RuleChip({ label }: { label: string }) {
   return (
@@ -681,7 +681,7 @@ const csb = StyleSheet.create({
   text:  { fontSize: FONT_SIZE.xs, fontWeight: FONT_WEIGHT.semibold },
 });
 
-// ── Styles ────────────────────────────────────────────────────────────────────
+// Styles
 
 const s = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.bg },

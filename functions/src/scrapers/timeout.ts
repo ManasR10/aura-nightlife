@@ -91,7 +91,7 @@ export async function scrapeTimeout(): Promise<RawScrapedEvent[]> {
       const hasNextData = /__NEXT_DATA__/.test(html);
       console.log(`Timeout ${url}: hasNextData=${hasNextData}`);
 
-      // ── 1. JSON-LD structured data (Timeout's primary markup) ────────────────
+      // 1. JSON-LD structured data (Timeout's primary markup)
       const jsonLdRegex = /<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi;
       let match: RegExpExecArray | null;
 
@@ -161,7 +161,7 @@ export async function scrapeTimeout(): Promise<RawScrapedEvent[]> {
         }
       }
 
-      // ── 2. __NEXT_DATA__ fallback ─────────────────────────────────────────────
+      // 2. __NEXT_DATA__ fallback
       const nextDataMatch = /__NEXT_DATA__\s*=\s*({[\s\S]*?})<\/script>/i.exec(html);
       if (nextDataMatch) {
         try {

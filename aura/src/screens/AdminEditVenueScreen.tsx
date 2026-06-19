@@ -155,7 +155,7 @@ export function AdminEditVenueScreen({ navigation, route }: Props) {
 
       <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent}>
 
-        {/* ── Tonight ──────────────────────────────────────────────────── */}
+        {/* Tonight */}
         <SectionHeader label="Tonight" />
         <Field label="Opening Note">
           <TextInput
@@ -178,7 +178,7 @@ export function AdminEditVenueScreen({ navigation, route }: Props) {
           />
         </Field>
 
-        {/* ── Promotions ────────────────────────────────────────────────── */}
+        {/* Promotions */}
         <SectionHeader label="Promotions" topMargin />
         <Text style={styles.fieldHint}>
           Shown on the venue page under "Today's Promotions". Max 5 items.
@@ -208,7 +208,7 @@ export function AdminEditVenueScreen({ navigation, route }: Props) {
           </View>
         )}
 
-        {/* ── Policies ─────────────────────────────────────────────────── */}
+        {/* Policies */}
         <SectionHeader label="Policies" topMargin />
         <Field label="Dress Code">
           <TextInput
@@ -230,7 +230,7 @@ export function AdminEditVenueScreen({ navigation, route }: Props) {
           />
         </Field>
 
-        {/* ── Branding ─────────────────────────────────────────────────── */}
+        {/* Branding */}
         <SectionHeader label="Branding" topMargin />
         <Field label="Banner Image URL">
           <TextInput
@@ -247,7 +247,7 @@ export function AdminEditVenueScreen({ navigation, route }: Props) {
           Replaces the Google Places cover photo on your venue page. Use a high-quality landscape image (16:9 or wider).
         </Text>
 
-        {/* ── Contact & Social ─────────────────────────────────────────── */}
+        {/* Contact & Social */}
         <SectionHeader label="Contact & Social" topMargin />
         <Field label="Instagram">
           <TextInput

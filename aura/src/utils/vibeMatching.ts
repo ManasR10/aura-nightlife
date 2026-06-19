@@ -12,7 +12,7 @@
 import type { VenueResult } from '../services/venues';
 import type { VenueLabels, EventDoc } from '../services/events';
 
-// ── Per-aura type weights (0–1) ───────────────────────────────────────────────
+// Per-aura type weights (0–1)
 
 const TYPE_WEIGHTS: Record<string, Record<string, number>> = {
   'high-energy': {
@@ -37,7 +37,7 @@ const TYPE_WEIGHTS: Record<string, Record<string, number>> = {
   'spontaneous': {},  // everything scores neutrally
 };
 
-// ── Event tag → aura mapping ──────────────────────────────────────────────────
+// Event tag → aura mapping
 
 const EVENT_TAG_MAP: Record<string, string[]> = {
   'high-energy': ['dj night', 'edm', 'techno', 'bollywood', 'nightlife', 'dance', 'rave', 'house'],
@@ -47,7 +47,7 @@ const EVENT_TAG_MAP: Record<string, string[]> = {
   'budget':      ['free entry', 'open bar', 'deals', 'happy hour', 'discount'],
 };
 
-// ── Component scorers ─────────────────────────────────────────────────────────
+// Component scorers
 
 export function getVibeMatchScore(
   venue: VenueResult,
@@ -125,7 +125,7 @@ export function getEventBoost(
   return hasTagMatch ? 0.5 : 0.2;
 }
 
-// ── Final ranking formula ─────────────────────────────────────────────────────
+// Final ranking formula
 
 export interface ScoredVenue {
   vibeMatchScore: number;

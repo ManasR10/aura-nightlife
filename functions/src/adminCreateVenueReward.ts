@@ -127,7 +127,7 @@ export const adminCreateVenueReward = onCall(
   },
 );
 
-// ── adminDeactivateVenueReward ─────────────────────────────────────────────────
+// adminDeactivateVenueReward
 
 export const adminDeactivateVenueReward = onCall(
   { region: 'asia-south1' },
@@ -153,7 +153,7 @@ export const adminDeactivateVenueReward = onCall(
   },
 );
 
-// ── adminMarkRewardRedeemed — venue staff marks a code as fulfilled ────────────
+// adminMarkRewardRedeemed — venue staff marks a code as fulfilled
 
 export const adminMarkRewardRedeemed = onCall(
   { region: 'asia-south1' },

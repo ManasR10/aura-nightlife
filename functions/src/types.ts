@@ -1,6 +1,6 @@
 import type { Timestamp } from 'firebase-admin/firestore';
 
-// ── User ──────────────────────────────────────────────────────────────────────
+// User
 
 export interface UserDoc {
   uid: string;
@@ -26,7 +26,7 @@ export interface UserPreferences {
   travelDistance: string;
 }
 
-// ── Venue (/venues/{placeId}) ─────────────────────────────────────────────────
+// Venue (/venues/{placeId})
 // Google Place ID is the document ID — single source of truth for venues.
 
 export interface VenueDoc {
@@ -52,7 +52,7 @@ export interface VenueDoc {
   source: 'google_places';
   lastFetchedAt: Timestamp;
   lastEnrichedAt: Timestamp | null;
-  // ── Discovery metadata (written by seedMumbaiVenueCatalogue) ─────────────
+  // Discovery metadata (written by seedMumbaiVenueCatalogue)
   city?: string;                    // 'Mumbai'
   zone?: string;                    // 'Bandra West' | 'Lower Parel' | …
   nightlifeCategory?: 'club' | 'bar' | 'lounge' | 'rooftop' | 'cafe';
@@ -62,7 +62,7 @@ export interface VenueDoc {
   discoveryPriority?: number;       // 0–100, higher = shown first in ranked lists
 }
 
-// ── Event (/events/{eventId}) ─────────────────────────────────────────────────
+// Event (/events/{eventId})
 
 export type EventSource = 'bookmyshow' | 'insider' | 'district' | 'timeout' | 'eventbrite' | 'ticketmaster' | 'manual';
 export type EventStatus = 'upcoming' | 'ongoing' | 'ended';
@@ -89,7 +89,7 @@ export interface EventDoc {
   scrapedAt: Timestamp;
 }
 
-// ── Venue Admin (/venueAdmins/{uid}) ─────────────────────────────────────────
+// Venue Admin (/venueAdmins/{uid})
 
 export interface VenueAdminDoc {
   uid: string;
@@ -107,13 +107,13 @@ export interface VenuePromotion {
   active: boolean;
 }
 
-// ── Venue Live State (/venueLive/{placeId}) ────────────────────────────────────
+// Venue Live State (/venueLive/{placeId})
 
 export type VibeLabel = 'hot' | 'okay' | 'slow' | 'unknown';
 
 export interface VenueLiveDoc {
   venueId: string;
-  // ── Activity ───────────────────────────────────────────────────────────────
+  // Activity
   liveScore: number;            // weighted sum of all active signals (activity proxy)
   isLiveNow: boolean;
   isTrending: boolean;
@@ -122,7 +122,7 @@ export interface VenueLiveDoc {
   lastUserUpdateAt: Timestamp | null;
   lastVenueUpdateAt: Timestamp | null;
   updatedAt: Timestamp;
-  // ── Vibe consensus (Phase 1) ───────────────────────────────────────────────
+  // Vibe consensus (Phase 1)
   vibeLabel: VibeLabel;         // winning bucket: hot | okay | slow | unknown
   vibeBreakdown: {              // weighted score per bucket
     hot:  number;
@@ -134,7 +134,7 @@ export interface VenueLiveDoc {
   lastConsensusAt: Timestamp;
 }
 
-// ── Live Signal (/liveSignals/{signalId}) ─────────────────────────────────────
+// Live Signal (/liveSignals/{signalId})
 
 export type SignalType = 'video' | 'checkin' | 'vibe' | 'crowd';
 export type SignalSourceType = 'user' | 'admin';
@@ -154,7 +154,7 @@ export interface LiveSignalDoc {
   expiresAt: Timestamp;
 }
 
-// ── Scrape Raw (/scrapeRaw/{docId}) ───────────────────────────────────────────
+// Scrape Raw (/scrapeRaw/{docId})
 
 export interface ScrapeRawDoc {
   source: EventSource;
@@ -164,7 +164,7 @@ export interface ScrapeRawDoc {
   error: string | null;
 }
 
-// ── Check-in (/checkins/{checkinId}) ─────────────────────────────────────────
+// Check-in (/checkins/{checkinId})
 
 export interface CheckInDoc {
   userId: string;
@@ -178,7 +178,7 @@ export interface CheckInDoc {
   caption: string;
 }
 
-// ── Venue Reward (/venueRewards/{rewardId}) ───────────────────────────────────
+// Venue Reward (/venueRewards/{rewardId})
 // Created by venue admins or super admin. One active reward per venue at a time.
 // Users earn this reward by completing a check-in session.
 
@@ -225,7 +225,7 @@ export interface VenueRewardDoc {
   updatedAt:    Timestamp;
 }
 
-// ── Reward Claim (/rewardClaims/{claimId}) ────────────────────────────────────
+// Reward Claim (/rewardClaims/{claimId})
 // Immutable record created by claimSessionReward CF.
 // Stores a full snapshot of the reward config at claim time so history
 // never breaks when venues update their reward.
@@ -256,7 +256,7 @@ export interface RewardClaimDoc {
   expiresAt:           Timestamp;
 }
 
-// ── Payout provider response (Razorpay / Cashfree) ───────────────────────────
+// Payout provider response (Razorpay / Cashfree)
 
 export interface PayoutResponse {
   id: string;
@@ -264,7 +264,7 @@ export interface PayoutResponse {
   utr?: string;
 }
 
-// ── Analytics (/analyticsEvents/{eventId}) ────────────────────────────────────
+// Analytics (/analyticsEvents/{eventId})
 
 export type AnalyticEventType =
   | 'venue_impression'      // venue card shown in feed
@@ -299,7 +299,7 @@ export interface AnalyticEventDoc {
   metadata:   Record<string, unknown>;
 }
 
-// ── Venue Analytics Daily (/venueAnalyticsDaily/{venueId_date}) ──────────────
+// Venue Analytics Daily (/venueAnalyticsDaily/{venueId_date})
 
 export interface VenueAnalyticsDailyDoc {
   venueId:          string;
@@ -322,7 +322,7 @@ export interface VenueAnalyticsDailyDoc {
   computedAt:       Timestamp;
 }
 
-// ── Venue Analytics Weekly (/venueAnalyticsWeekly/{venueId_week}) ─────────────
+// Venue Analytics Weekly (/venueAnalyticsWeekly/{venueId_week})
 
 export interface VenueAnalyticsWeeklyDoc extends Omit<VenueAnalyticsDailyDoc, 'date'> {
   weekStart:        string;            // 'YYYY-MM-DD' of Monday IST
@@ -333,7 +333,7 @@ export interface VenueAnalyticsWeeklyDoc extends Omit<VenueAnalyticsDailyDoc, 'd
   repeatRate:       number;            // repeatVisitors / uniqueUsers (0–1)
 }
 
-// ── Banner Ad (/banners/{bannerId}) ──────────────────────────────────────────
+// Banner Ad (/banners/{bannerId})
 // Shown in the HomeScreen hero carousel. Venue admins submit banners;
 // ops team approves them by setting active: true.
 
@@ -351,7 +351,7 @@ export interface BannerDoc {
   createdBy:  string;       // venue admin uid
 }
 
-// ── Shared raw scraped event (internal pipeline shape) ────────────────────────
+// Shared raw scraped event (internal pipeline shape)
 
 export interface RawScrapedEvent {
   source: EventSource;

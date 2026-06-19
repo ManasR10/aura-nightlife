@@ -232,7 +232,7 @@ export function AdminEventsScreen({ navigation, route }: Props) {
         )}
       </ScrollView>
 
-      {/* ── Create Event Modal ────────────────────────────────────────────── */}
+      {/* Create Event Modal */}
       <Modal visible={showCreate} animationType="slide" presentationStyle="pageSheet">
         <KeyboardAvoidingView
           style={styles.modal}
@@ -334,7 +334,7 @@ export function AdminEventsScreen({ navigation, route }: Props) {
   );
 }
 
-// ── Sub-components ──────────────────────────────────────────────────────────
+// Sub-components
 
 function StatusBadge({ status }: { status: string }) {
   const color = status === 'ongoing' ? COLORS.success : COLORS.purple400;
@@ -361,7 +361,7 @@ function formatDate(d: Date): string {
   });
 }
 
-// ── Styles ──────────────────────────────────────────────────────────────────
+// Styles
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.bg },

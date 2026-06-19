@@ -72,7 +72,7 @@ export function EntryScreen({ navigation }: Props) {
 
   const confirmRef = useRef<FirebaseAuthTypes.ConfirmationResult | null>(null);
 
-  // ── Login actions ────────────────────────────────────────────────────────────
+  // Login actions
 
   async function handleLoginPhone() {
     const digits = phone.replace(/\D/g, '');
@@ -121,7 +121,7 @@ export function EntryScreen({ navigation }: Props) {
     } catch (e) { setError(getFirebaseErrorMessage(e)); } finally { setLoading(false); }
   }
 
-  // ── Signup actions ───────────────────────────────────────────────────────────
+  // Signup actions
 
   async function handleSignupSendOtp() {
     const digits = signupPhone.replace(/\D/g, '');
@@ -169,7 +169,7 @@ export function EntryScreen({ navigation }: Props) {
     setError('');
   }
 
-  // ── Render ────────────────────────────────────────────────────────────────────
+  // Render
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

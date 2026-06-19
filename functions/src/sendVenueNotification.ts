@@ -47,13 +47,13 @@ export const sendVenueNotification = onCall(
 
     const uid = req.auth.uid;
 
-    // ── Verify admin owns this venue ───────────────────────────────────────
+    // Verify admin owns this venue
     const adminSnap = await db.collection('venueAdmins').doc(uid).get();
     if (!adminSnap.exists) throw new HttpsError('permission-denied', 'Not a venue admin.');
     const managed: string[] = adminSnap.data()!.managedVenueIds ?? [];
     if (!managed.includes(venueId)) throw new HttpsError('permission-denied', 'You do not manage this venue.');
 
-    // ── Free-mode rate limit: 1 per night per venue ────────────────────────
+    // Free-mode rate limit: 1 per night per venue
     if (mode === 'free') {
       const nightKey = getNightKey();
       const limitRef = db.collection('venueNotifyLog').doc(`${venueId}_${nightKey}`);
@@ -71,7 +71,7 @@ export const sendVenueNotification = onCall(
       await limitRef.set({ venueId, nightKey, count: sentCount + 1, lastSentAt: Timestamp.now() }, { merge: true });
     }
 
-    // ── Collect target FCM tokens ──────────────────────────────────────────
+    // Collect target FCM tokens
 
     // 1. Users who saved this venue
     const savedSnap = await db
@@ -101,7 +101,7 @@ export const sendVenueNotification = onCall(
       return { sent: 0, skipped: 0, message: 'No eligible users to notify.' };
     }
 
-    // ── Fetch FCM tokens in batches of 10 (Firestore .getAll limit) ────────
+    // Fetch FCM tokens in batches of 10 (Firestore .getAll limit)
     const tokens: string[] = [];
 
     for (let i = 0; i < allUids.length; i += 10) {
@@ -121,7 +121,7 @@ export const sendVenueNotification = onCall(
       return { sent: 0, skipped: allUids.length, message: 'No FCM tokens found for eligible users.' };
     }
 
-    // ── Send FCM multicast in batches of 500 (FCM limit) ──────────────────
+    // Send FCM multicast in batches of 500 (FCM limit)
     const messaging = getMessaging();
     let sent = 0;
     let failed = 0;
@@ -163,7 +163,7 @@ export const sendVenueNotification = onCall(
       });
     }
 
-    // ── Log the send ───────────────────────────────────────────────────────
+    // Log the send
     await db.collection('venueNotifyLog').add({
       venueId,
       venueName,

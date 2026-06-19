@@ -3,7 +3,7 @@ export type VenueCategory = 'club' | 'bar' | 'lounge';
 export type UserRole          = 'user' | 'venue_admin';
 export type UserAccountStatus = 'active' | 'suspended' | 'banned';
 
-// ── Firestore user document (/users/{uid}) ────────────────────────────────────
+// Firestore user document (/users/{uid})
 
 export interface UserDoc {
   uid: string;
@@ -34,7 +34,7 @@ export interface UserPreferences {
   travelDistance: string;
 }
 
-// ── Other Firestore types ─────────────────────────────────────────────────────
+// Other Firestore types
 
 export interface Venue {
   id: string;
@@ -90,11 +90,11 @@ export interface LiveUpdate {
   expiresAt: number;
 }
 
-// ── Navigation ────────────────────────────────────────────────────────────────
+// Navigation
 
 export type TabName = 'live' | 'feed' | 'post' | 'explore' | 'profile';
 
-// ── Venue Admin types ─────────────────────────────────────────────────────────
+// Venue Admin types
 
 export interface VenueAdminDoc {
   uid: string;
@@ -122,7 +122,7 @@ export interface VenueLive {
   lastConsensusAt: Date;
 }
 
-// ── Check-in session (/checkInSessions/{uid}_{venueId}_{nightKey}) ────────────
+// Check-in session (/checkInSessions/{uid}_{venueId}_{nightKey})
 
 export type CheckInLevel = 0 | 1 | 2 | 3;
 export type RewardStatus = 'locked' | 'unlocked' | 'claimed';

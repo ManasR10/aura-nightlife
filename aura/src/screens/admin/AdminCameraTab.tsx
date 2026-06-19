@@ -127,7 +127,7 @@ export function AdminCameraTab({ venueId, venueName }: Props) {
     }
   }
 
-  // ── Success ───────────────────────────────────────────────────────────────
+  // Success
 
   if (posted) {
     return (
@@ -147,7 +147,7 @@ export function AdminCameraTab({ venueId, venueName }: Props) {
     );
   }
 
-  // ── Main ──────────────────────────────────────────────────────────────────
+  // Main
 
   return (
     <View style={[s.container, { paddingTop: insets.top }]}>
@@ -254,7 +254,7 @@ export function AdminCameraTab({ venueId, venueName }: Props) {
   );
 }
 
-// ── Styles ────────────────────────────────────────────────────────────────────
+// Styles
 
 const s = StyleSheet.create({
   container:   { flex: 1, backgroundColor: '#030712' },

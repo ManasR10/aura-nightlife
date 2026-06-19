@@ -10,7 +10,7 @@ import { getFirestore, Timestamp, FieldValue } from 'firebase-admin/firestore';
 
 const db = getFirestore();
 
-// ── Shared helper ─────────────────────────────────────────────────────────────
+// Shared helper
 
 async function assertAdminManagesVenue(uid: string, venueId: string): Promise<string> {
   const adminSnap = await db.collection('venueAdmins').doc(uid).get();
@@ -26,7 +26,7 @@ async function assertAdminManagesVenue(uid: string, venueId: string): Promise<st
   return venueSnap.exists ? (venueSnap.data()!.name as string) ?? venueId : venueId;
 }
 
-// ── adminCreateEvent ──────────────────────────────────────────────────────────
+// adminCreateEvent
 
 interface CreateEventData {
   venueId:      string;
@@ -86,7 +86,7 @@ export const adminCreateEvent = onCall(
   },
 );
 
-// ── adminCancelEvent ──────────────────────────────────────────────────────────
+// adminCancelEvent
 
 interface CancelEventData {
   venueId:  string;

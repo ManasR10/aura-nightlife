@@ -35,7 +35,7 @@ const FIELD_MASK = [
   'places.outdoorSeating',
 ].join(',');
 
-// ── Mumbai nightlife zones ─────────────────────────────────────────────────────
+// Mumbai nightlife zones
 
 interface MumbaiZone {
   name: string;
@@ -60,7 +60,7 @@ const MUMBAI_ZONES: MumbaiZone[] = [
   { name: 'Versova',       lat: 19.1307, lng: 72.8166, radiusMetres: 1000, priorityBoost:  4 },
 ];
 
-// ── Places API shape ──────────────────────────────────────────────────────────
+// Places API shape
 
 interface PlacesApiPlace {
   id: string;
@@ -81,7 +81,7 @@ interface PlacesApiPlace {
   outdoorSeating?: boolean;
 }
 
-// ── Derivation helpers ────────────────────────────────────────────────────────
+// Derivation helpers
 
 function normalizePriceLevel(raw: string | undefined): string | null {
   const map: Record<string, string> = {
@@ -147,13 +147,13 @@ function deriveDiscoveryPriority(
   return Math.max(0, Math.min(100, score));
 }
 
-// ── Sleep helper ──────────────────────────────────────────────────────────────
+// Sleep helper
 
 function sleep(ms: number) {
   return new Promise<void>((res) => setTimeout(res, ms));
 }
 
-// ── Callable ──────────────────────────────────────────────────────────────────
+// Callable
 
 export const seedMumbaiVenueCatalogue = onCall(
   {
@@ -234,7 +234,7 @@ export const seedMumbaiVenueCatalogue = onCall(
       return { dryRun: true, found: seen.size, zones: activeZones.map((z) => z.name) };
     }
 
-    // ── Upsert all deduped venues ──────────────────────────────────────────
+    // Upsert all deduped venues
     const batch    = db.batch();
     let batchCount = 0;
     let written    = 0;

@@ -52,7 +52,7 @@ export function AdminUploadScreen({ navigation, route }: Props) {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [posting,        setPosting]        = useState(false);
 
-  // ── Video helpers ─────────────────────────────────────────────────────────
+  // Video helpers
 
   function promptVideo() {
     Alert.alert('Add Official Video', 'Record a 30-second clip or choose from library', [
@@ -86,7 +86,7 @@ export function AdminUploadScreen({ navigation, route }: Props) {
     );
   }
 
-  // ── Post ──────────────────────────────────────────────────────────────────
+  // Post
 
   async function handlePost() {
     if (!selectedVibe) {
@@ -100,7 +100,7 @@ export function AdminUploadScreen({ navigation, route }: Props) {
     try {
       let mediaRef: string | null = null;
 
-      // ── Upload video if attached ─────────────────────────────────────────
+      // Upload video if attached
       if (videoUri) {
         const uid = auth().currentUser?.uid ?? 'admin';
         const ext = videoUri.split('.').pop() ?? 'mp4';
@@ -120,7 +120,7 @@ export function AdminUploadScreen({ navigation, route }: Props) {
         mediaRef = await ref.getDownloadURL();
       }
 
-      // ── Generate + upload thumbnail (best-effort) ────────────────────────
+      // Generate + upload thumbnail (best-effort)
       let thumbnailRef: string | null = null;
       if (videoUri) {
         try {
@@ -135,7 +135,7 @@ export function AdminUploadScreen({ navigation, route }: Props) {
         }
       }
 
-      // ── Submit signal ────────────────────────────────────────────────────
+      // Submit signal
       await fnSouth.httpsCallable('adminSubmitSignal')({
         venueId,
         signalType: videoUri ? 'video' : 'vibe',
@@ -144,7 +144,7 @@ export function AdminUploadScreen({ navigation, route }: Props) {
         vibeTag: selectedVibe,
       });
 
-      // ── Update venue profile with opening note ───────────────────────────
+      // Update venue profile with opening note
       if (openingNote.trim()) {
         await fnSouth.httpsCallable('adminUpdateVenue')({
           venueId,
@@ -167,7 +167,7 @@ export function AdminUploadScreen({ navigation, route }: Props) {
     }
   }
 
-  // ── Render ────────────────────────────────────────────────────────────────
+  // Render
 
   const isUploading = posting && videoUri != null && uploadProgress < 100;
 
@@ -186,7 +186,7 @@ export function AdminUploadScreen({ navigation, route }: Props) {
 
       <ScrollView style={styles.scroll} contentContainerStyle={styles.scrollContent}>
 
-        {/* ── Vibe selector ───────────────────────────────────────────── */}
+        {/* Vibe selector */}
         <Text style={styles.sectionLabel}>HOW IS IT RIGHT NOW?</Text>
         <View style={styles.vibeGrid}>
           {VIBE_OPTIONS.map((opt) => {
@@ -205,7 +205,7 @@ export function AdminUploadScreen({ navigation, route }: Props) {
           })}
         </View>
 
-        {/* ── Official video ──────────────────────────────────────────── */}
+        {/* Official video */}
         <Text style={[styles.sectionLabel, { marginTop: SPACING.lg }]}>OFFICIAL VIDEO (OPTIONAL)</Text>
 
         {videoUri ? (
@@ -239,7 +239,7 @@ export function AdminUploadScreen({ navigation, route }: Props) {
           </View>
         )}
 
-        {/* ── Opening note ────────────────────────────────────────────── */}
+        {/* Opening note */}
         <Text style={[styles.sectionLabel, { marginTop: SPACING.lg }]}>OPENING NOTE (OPTIONAL)</Text>
         <TextInput
           style={styles.noteInput}
@@ -286,7 +286,7 @@ export function AdminUploadScreen({ navigation, route }: Props) {
   );
 }
 
-// ── Styles ────────────────────────────────────────────────────────────────────
+// Styles
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.bg },

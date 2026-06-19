@@ -45,7 +45,7 @@ export const adminUpdateVenue = onCall(
 
     const uid = req.auth.uid;
 
-    // ── Verify admin ownership ─────────────────────────────────────────────
+    // Verify admin ownership
     const adminSnap = await db.collection('venueAdmins').doc(uid).get();
     if (!adminSnap.exists) {
       throw new HttpsError('permission-denied', 'Not a venue admin.');
@@ -58,7 +58,7 @@ export const adminUpdateVenue = onCall(
       throw new HttpsError('permission-denied', 'You do not manage this venue.');
     }
 
-    // ── Strip any disallowed fields ───────────────────────────────────────
+    // Strip any disallowed fields
     const safeUpdates: Record<string, unknown> = {};
     for (const [key, val] of Object.entries(updates)) {
       if (ALLOWED_FIELDS.has(key)) {
@@ -78,7 +78,7 @@ export const adminUpdateVenue = onCall(
   },
 );
 
-// ── Admin signal submission (venue-posted content, no geo required) ───────────
+// Admin signal submission (venue-posted content, no geo required)
 
 interface AdminSignalData {
   venueId:       string;

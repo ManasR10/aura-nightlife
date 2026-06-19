@@ -106,7 +106,7 @@ export const claimSessionReward = onCall(
     const session   = sessionSnap.data()!;
     const venueName = (venueSnap.data()?.name as string) ?? '';
 
-    // ── Idempotent: already claimed ──────────────────────────────────────────
+    // Idempotent: already claimed
     if (session.rewardStatus === 'claimed') {
       const existingSnap = await db.collection('rewardClaims')
         .where('sessionId', '==', sessionId)
@@ -126,7 +126,7 @@ export const claimSessionReward = onCall(
       }
     }
 
-    // ── Pre-claim checks ─────────────────────────────────────────────────────
+    // Pre-claim checks
     if ((session.level as number) < 3) {
       throw new HttpsError(
         'failed-precondition',
@@ -137,7 +137,7 @@ export const claimSessionReward = onCall(
       throw new HttpsError('failed-precondition', 'Reward is not unlocked yet.');
     }
 
-    // ── Fetch active reward config ───────────────────────────────────────────
+    // Fetch active reward config
     const now = Timestamp.now();
     let reward: VenueRewardDoc;
     let venueRewardRef: FirebaseFirestore.DocumentReference | null = null;
@@ -168,7 +168,7 @@ export const claimSessionReward = onCall(
 
     const limits = { ...DEFAULT_LIMITS, ...reward.limits };
 
-    // ── Active window check ──────────────────────────────────────────────────
+    // Active window check
     if (!isWithinWindow(reward.activeWindow ?? null)) {
       const w = reward.activeWindow!;
       throw new HttpsError(
@@ -177,7 +177,7 @@ export const claimSessionReward = onCall(
       );
     }
 
-    // ── Nightly cap check ────────────────────────────────────────────────────
+    // Nightly cap check
     if (venueRewardRef && reward.claimCount >= limits.maxClaimsPerNight) {
       throw new HttpsError(
         'resource-exhausted',
@@ -185,7 +185,7 @@ export const claimSessionReward = onCall(
       );
     }
 
-    // ── Daily budget check (cash only) ───────────────────────────────────────
+    // Daily budget check (cash only)
     if (
       limits.dailyBudgetINR !== null &&
       reward.rewardType === 'cash' &&
@@ -206,7 +206,7 @@ export const claimSessionReward = onCall(
       }
     }
 
-    // ── Per-user per-night check ─────────────────────────────────────────────
+    // Per-user per-night check
     const userNightSnap = await db.collection('rewardClaims')
       .where('uid',      '==', uid)
       .where('venueId',  '==', venueId)
@@ -219,7 +219,7 @@ export const claimSessionReward = onCall(
       );
     }
 
-    // ── Write claim + update session ─────────────────────────────────────────
+    // Write claim + update session
     const redemptionCode = generateCode();
     const expiresAt      = Timestamp.fromMillis(now.toMillis() + 30 * 24 * 60 * 60 * 1000);
     const claimRef       = db.collection('rewardClaims').doc();

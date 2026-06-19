@@ -52,7 +52,7 @@ export function RootNavigator() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={screenOptions}>
 
-        {/* ── Unauthenticated ───────────────────────────────────────────────── */}
+        {/* Unauthenticated */}
         {!authUser && (
           <>
             <Stack.Screen name="Entry"      component={EntryScreen} />
@@ -60,17 +60,17 @@ export function RootNavigator() {
           </>
         )}
 
-        {/* ── Authenticated — profile incomplete ───────────────────────────── */}
+        {/* Authenticated — profile incomplete */}
         {authUser && userDoc && !userDoc.profileCompleted && (
           <Stack.Screen name="ProfileSetup" component={ProfileSetupScreen} />
         )}
 
-        {/* ── Authenticated — onboarding incomplete ────────────────────────── */}
+        {/* Authenticated — onboarding incomplete */}
         {authUser && userDoc?.profileCompleted && !userDoc.onboardingCompleted && (
           <Stack.Screen name="Onboarding" component={OnboardingScreen} />
         )}
 
-        {/* ── Venue admin flow ──────────────────────────────────────────────── */}
+        {/* Venue admin flow */}
         {authUser && userDoc?.role === 'venue_admin' && (
           <>
             <Stack.Screen name="AdminDashboard" component={AdminDashboardScreen} />
@@ -82,7 +82,7 @@ export function RootNavigator() {
           </>
         )}
 
-        {/* ── Fully active user flow ────────────────────────────────────────── */}
+        {/* Fully active user flow */}
         {authUser && userDoc?.role !== 'venue_admin' && userDoc?.profileCompleted && userDoc.onboardingCompleted && (
           <>
             <Stack.Screen name="Main"        component={MainScreen} />

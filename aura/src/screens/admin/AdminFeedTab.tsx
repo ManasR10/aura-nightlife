@@ -34,7 +34,7 @@ import { Eye, X, CheckCircle, Video as VideoIcon, Trash2 } from 'lucide-react-na
 import { fnSouth } from '../../firebase/fns';
 import { COLORS, SPACING, RADIUS, FONT_SIZE, FONT_WEIGHT } from '../../theme';
 
-// ── Types ─────────────────────────────────────────────────────────────────────
+// Types
 
 interface Signal {
   signalId:    string;
@@ -67,7 +67,7 @@ function fmtViews(n: number): string {
   return String(n);
 }
 
-// ── Component ─────────────────────────────────────────────────────────────────
+// Component
 
 interface Props { venueId: string; requestedSubTab?: SubTab }
 
@@ -91,7 +91,7 @@ export function AdminFeedTab({ venueId, requestedSubTab }: Props) {
   const [errored,      setErrored]      = useState(false);
   const prevId = useRef<string | null>(null);
 
-  // ── Load all video signals for this venue once ────────────────────────────
+  // Load all video signals for this venue once
 
   const loadSignals = useCallback(async () => {
     if (!venueId) { setLoading(false); return; }
@@ -127,7 +127,7 @@ export function AdminFeedTab({ venueId, requestedSubTab }: Props) {
 
   useEffect(() => { loadSignals(); }, [loadSignals]);
 
-  // ── Derived list based on sub-tab + filter ────────────────────────────────
+  // Derived list based on sub-tab + filter
 
   const displayList: Signal[] = (() => {
     const sourceType = subTab === 'guest' ? 'user' : 'admin';
@@ -147,7 +147,7 @@ export function AdminFeedTab({ venueId, requestedSubTab }: Props) {
     return items;
   })();
 
-  // ── Open video + increment viewCount ──────────────────────────────────────
+  // Open video + increment viewCount
 
   function openVideo(signal: Signal) {
     setPaused(true);
@@ -176,12 +176,12 @@ export function AdminFeedTab({ venueId, requestedSubTab }: Props) {
     prevId.current = activeSignal?.signalId ?? null;
   }
 
-  // ── Render ────────────────────────────────────────────────────────────────
+  // Render
 
   return (
     <View style={[s.container, { paddingTop: insets.top }]}>
 
-      {/* ── Sub-tab row ────────────────────────────────────────────────── */}
+      {/* Sub-tab row */}
       <View style={s.subTabRow}>
         {(['guest', 'venue'] as SubTab[]).map((tab) => (
           <Pressable
@@ -197,7 +197,7 @@ export function AdminFeedTab({ venueId, requestedSubTab }: Props) {
         ))}
       </View>
 
-      {/* ── Filter chips ──────────────────────────────────────────────── */}
+      {/* Filter chips */}
       <View style={s.filterRow}>
         {(['tonight', 'week', 'all'] as Filter[]).map((f) => (
           <Pressable
@@ -212,7 +212,7 @@ export function AdminFeedTab({ venueId, requestedSubTab }: Props) {
         ))}
       </View>
 
-      {/* ── Content ───────────────────────────────────────────────────── */}
+      {/* Content */}
       {loading ? (
         <View style={s.center}>
           <ActivityIndicator color={COLORS.purple400} size="large" />
@@ -315,7 +315,7 @@ export function AdminFeedTab({ venueId, requestedSubTab }: Props) {
         </ScrollView>
       )}
 
-      {/* ── Full-screen video modal ────────────────────────────────────── */}
+      {/* Full-screen video modal */}
       <Modal visible={!!activeSignal} animationType="fade" transparent={false} onRequestClose={closeVideo}>
         {activeSignal && (
           <View style={s.playerBg}>
@@ -392,7 +392,7 @@ export function AdminFeedTab({ venueId, requestedSubTab }: Props) {
   );
 }
 
-// ── Styles ────────────────────────────────────────────────────────────────────
+// Styles
 
 const s = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#030712' },

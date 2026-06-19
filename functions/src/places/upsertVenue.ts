@@ -4,7 +4,7 @@
  * Called internally by searchNearbyVenues, searchVenuesByText, refreshVenueDetails.
  * Never exposed directly as a callable — the API key stays server-side.
  *
- * ── Venue data layer ownership ────────────────────────────────────────────────
+ *  Venue data layer ownership
  *
  *  Google-owned (this file writes, { merge: true } safe to overwrite)
  *    name, address, location, rating, userRatingCount, types, priceLevel,
@@ -46,7 +46,7 @@ const FIELD_MASK_DETAIL = [
   'outdoorSeating',
 ].join(',');
 
-// ── Internal Places API shape ─────────────────────────────────────────────────
+// Internal Places API shape
 
 interface PlacesApiVenue {
   id: string;
@@ -67,7 +67,7 @@ interface PlacesApiVenue {
   outdoorSeating?: boolean;
 }
 
-// ── Price normalizer ──────────────────────────────────────────────────────────
+// Price normalizer
 
 function normalizePriceLevel(raw: string | undefined): string | null {
   const map: Record<string, string> = {
@@ -80,7 +80,7 @@ function normalizePriceLevel(raw: string | undefined): string | null {
   return raw ? (map[raw] ?? null) : null;
 }
 
-// ── Main export ───────────────────────────────────────────────────────────────
+// Main export
 
 /**
  * Upserts a venue from a raw Places API place object.

@@ -26,7 +26,7 @@ const WEIGHTS: Record<string, number> = {
   crowd:       1,
 };
 
-// ── Haversine distance (metres) ───────────────────────────────────────────────
+// Haversine distance (metres)
 
 function haversineMeters(
   lat1: number, lng1: number,
@@ -42,7 +42,7 @@ function haversineMeters(
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-// ── Live state recalculation ──────────────────────────────────────────────────
+// Live state recalculation
 //
 // Two concepts kept separate:
 //   liveScore   → how ACTIVE is this venue right now? (counts all signals)
@@ -66,12 +66,12 @@ export async function recalculateVenueLive(venueId: string): Promise<void> {
     .where('createdAt', '>=', Timestamp.fromMillis(now - TWO_HOURS_MS))
     .get();
 
-  // ── Per-bucket vibe scores ────────────────────────────────────────────────
+  // Per-bucket vibe scores
   let hotScore  = 0;
   let okayScore = 0;
   let slowScore = 0;
 
-  // ── Activity totals ───────────────────────────────────────────────────────
+  // Activity totals
   let liveScore         = 0;
   let activeSignalCount = 0;
   let recentCount       = 0;
@@ -115,7 +115,7 @@ export async function recalculateVenueLive(venueId: string): Promise<void> {
     }
   }
 
-  // ── Ongoing event — small context boost, not dominant ────────────────────
+  // Ongoing event — small context boost, not dominant
   const eventSnap = await db()
     .collection('events')
     .where('venueId', '==', venueId)
@@ -129,7 +129,7 @@ export async function recalculateVenueLive(venueId: string): Promise<void> {
     liveScore += 6;     // activity boost for ongoing event
   }
 
-  // ── Vibe consensus ────────────────────────────────────────────────────────
+  // Vibe consensus
   const totalVibeScore = hotScore + okayScore + slowScore;
 
   let vibeLabel: 'hot' | 'okay' | 'slow' | 'unknown' = 'unknown';
@@ -142,7 +142,7 @@ export async function recalculateVenueLive(venueId: string): Promise<void> {
                      max === okayScore ? 'okay' : 'slow';
   }
 
-  // ── Activity labels ───────────────────────────────────────────────────────
+  // Activity labels
   const crowdLabel =
     liveScore >= 20 ? 'packed' :
     liveScore >= 8  ? 'moderate' :
@@ -170,7 +170,7 @@ export async function recalculateVenueLive(venueId: string): Promise<void> {
   }, { merge: true });
 }
 
-// ── Cloud Function ────────────────────────────────────────────────────────────
+// Cloud Function
 
 export const VALID_VIBE_TAGS = ['hot', 'okay', 'slow'] as const;
 export type VibeTag = typeof VALID_VIBE_TAGS[number];
@@ -238,7 +238,7 @@ export const submitLiveSignal = onCall(
 
     const uid = req.auth.uid;
 
-    // ── Rate limit (user signals only) ───────────────────────────────────────
+    // Rate limit (user signals only)
     // Admin signals come from venue dashboards and have their own throttling.
     if (sourceType === 'user') {
       const windowStart = Timestamp.fromMillis(Date.now() - RATE_LIMIT_WINDOW_MS);
@@ -257,7 +257,7 @@ export const submitLiveSignal = onCall(
       }
     }
 
-    // ── Fetch venue for geofence check ────────────────────────────────────
+    // Fetch venue for geofence check
     const venueSnap = await db().collection('venues').doc(venueId).get();
     if (!venueSnap.exists) throw new HttpsError('not-found', `Venue ${venueId} not found.`);
 
@@ -276,12 +276,12 @@ export const submitLiveSignal = onCall(
       );
     }
 
-    // ── Determine weight ──────────────────────────────────────────────────
+    // Determine weight
     // sourceType is always 'user' here; admin signals go via adminSubmitSignal.
     const weightKey = signalType === 'video' ? 'video_user' : signalType;
     const weight = WEIGHTS[weightKey] ?? 1;
 
-    // ── Write live signal ──────────────────────────────────────────────────
+    // Write live signal
     const now = Timestamp.now();
     const expiresAt = Timestamp.fromMillis(now.toMillis() + 2 * 60 * 60 * 1000);
 
@@ -302,7 +302,7 @@ export const submitLiveSignal = onCall(
       expiresAt,
     });
 
-    // ── Advance check-in session for geo-verified user videos ─────────────
+    // Advance check-in session for geo-verified user videos
     let sessionLevel: number | null = null;
     let cooldownRemainingSecs = 0;
 
@@ -347,7 +347,7 @@ export const submitLiveSignal = onCall(
       }
     }
 
-    // ── Recalculate live state ────────────────────────────────────────────
+    // Recalculate live state
     await recalculateVenueLive(venueId);
 
     return { success: true, signalId: signalRef.id, geoVerified, sessionLevel, cooldownRemainingSecs };

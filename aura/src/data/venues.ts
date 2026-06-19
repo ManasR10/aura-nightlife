@@ -1,4 +1,4 @@
-// ── Venue data ported from Lovable ────────────────────────────────────────────
+// Venue data ported from Lovable
 
 export interface EventHighlight {
   id: string;
@@ -60,7 +60,7 @@ export type AuraOption = {
   desc: string;
 };
 
-// ── Hero carousel events ───────────────────────────────────────────────────
+// Hero carousel events
 
 export const EVENT_HIGHLIGHTS: EventHighlight[] = [
   {
@@ -105,7 +105,7 @@ export const EVENT_HIGHLIGHTS: EventHighlight[] = [
   },
 ];
 
-// ── Aura mood options ──────────────────────────────────────────────────────
+// Aura mood options
 
 export const AURA_OPTIONS: AuraOption[] = [
   { id: 'high-energy', emoji: '🔥', label: 'High Energy', desc: 'Dance & loud music' },
@@ -116,7 +116,7 @@ export const AURA_OPTIONS: AuraOption[] = [
   { id: 'budget',      emoji: '💸', label: 'Budget Fun',   desc: 'Good deals & vibes' },
 ];
 
-// ── Venue summaries for feed ───────────────────────────────────────────────
+// Venue summaries for feed
 
 export const VENUE_SUMMARIES: Record<string, VenueSummary> = {
   '1':  { id: '1',  name: 'Corner Room',       musicPlaying: 'EDM / House',          crowdLevel: 'Busy',     waitTime: '5-10 mins', distance: '0.8 mi', distanceKm: 1.3, vibe: 'party',  budget: 'mid'  },
@@ -132,7 +132,7 @@ export const VENUE_SUMMARIES: Record<string, VenueSummary> = {
   '11': { id: '11', name: 'Bora Bora',          musicPlaying: 'Tropical / Deep House', crowdLevel: 'Vibrant', waitTime: '10 mins',   distance: '2.5 mi', distanceKm: 4.0, vibe: 'party',  budget: 'high' },
 };
 
-// ── Venue detail pages ─────────────────────────────────────────────────────
+// Venue detail pages
 
 export const VENUE_DETAILS: Record<string, VenueInfo> = {
   '1': {
@@ -170,7 +170,7 @@ export const VENUE_DETAILS: Record<string, VenueInfo> = {
   },
 };
 
-// ── Live feed posts ────────────────────────────────────────────────────────
+// Live feed posts
 
 const now = new Date();
 const min = (m: number) => new Date(now.getTime() - m * 60_000);

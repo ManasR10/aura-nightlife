@@ -149,7 +149,7 @@ export function ClaimRewardScreen({ route, navigation }: Props) {
     }, [authUser?.uid, venueId, startCountdown]),
   );
 
-  // ── Step 1: GPS verify ───────────────────────────────────────────────────────
+  // Step 1: GPS verify
 
   async function handleCheckIn() {
     setLoading(true); setError('');
@@ -176,13 +176,13 @@ export function ClaimRewardScreen({ route, navigation }: Props) {
     } finally { setLoading(false); }
   }
 
-  // ── Post clip ────────────────────────────────────────────────────────────────
+  // Post clip
 
   function handlePostClip() {
     navigation.navigate('RecordVideo', { venueId, venueName, fromCheckin: true });
   }
 
-  // ── Claim reward — no UPI, just one tap ──────────────────────────────────────
+  // Claim reward — no UPI, just one tap
 
   async function handleClaim() {
     setLoading(true); setError('');
@@ -196,7 +196,7 @@ export function ClaimRewardScreen({ route, navigation }: Props) {
     } finally { setLoading(false); }
   }
 
-  // ── Copy code ────────────────────────────────────────────────────────────────
+  // Copy code
 
   function handleCopy() {
     if (!claimed) return;
@@ -218,7 +218,7 @@ export function ClaimRewardScreen({ route, navigation }: Props) {
   const rewardStatus = session?.rewardStatus ?? 'locked';
   const cooldownOver = countdown === 0;
 
-  // ── Claimed success screen ────────────────────────────────────────────────────
+  // Claimed success screen
 
   if (claimed) {
     return (
@@ -265,7 +265,7 @@ export function ClaimRewardScreen({ route, navigation }: Props) {
     );
   }
 
-  // ── Main check-in flow ────────────────────────────────────────────────────────
+  // Main check-in flow
 
   return (
     <View style={[st.container, { paddingBottom: insets.bottom }]}>
@@ -383,7 +383,7 @@ export function ClaimRewardScreen({ route, navigation }: Props) {
   );
 }
 
-// ── Sub-components ────────────────────────────────────────────────────────────
+// Sub-components
 
 function Header({ insets, onBack }: { insets: { top: number }; onBack: () => void }) {
   return (
@@ -436,7 +436,7 @@ function formatCountdown(secs: number): string {
   return `${m}:${s}`;
 }
 
-// ── Styles ────────────────────────────────────────────────────────────────────
+// Styles
 
 const st = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.bg },

@@ -46,7 +46,7 @@ export const seedPseudoAdmin = onCall(
       throw new Error('Pass { email, password } in request.data or set SEED_ADMIN_EMAIL / SEED_ADMIN_PASSWORD env vars.');
     }
 
-    // ── 1. Create (or find) the Firebase Auth user ────────────────────────
+    // 1. Create (or find) the Firebase Auth user
     let uid: string;
     try {
       const existing = await auth.getUserByEmail(email);
@@ -64,7 +64,7 @@ export const seedPseudoAdmin = onCall(
 
     const now = Timestamp.now();
 
-    // ── 2. /users/{uid} ───────────────────────────────────────────────────
+    // 2. /users/{uid}
     await db.collection('users').doc(uid).set({
       uid,
       phoneNumber:        '',
@@ -87,7 +87,7 @@ export const seedPseudoAdmin = onCall(
       lastLoginAt: now,
     }, { merge: true });
 
-    // ── 3. /venueAdmins/{uid} ─────────────────────────────────────────────
+    // 3. /venueAdmins/{uid}
     await db.collection('venueAdmins').doc(uid).set({
       uid,
       managedVenueIds: [DEMO_VENUE_ID],
@@ -96,7 +96,7 @@ export const seedPseudoAdmin = onCall(
       createdAt:       now,
     }, { merge: true });
 
-    // ── 4. /venues/demo-venue-corner-room ────────────────────────────────
+    // 4. /venues/demo-venue-corner-room
     await db.collection('venues').doc(DEMO_VENUE_ID).set({
       placeId:      DEMO_VENUE_ID,
       name:         'Corner Room',

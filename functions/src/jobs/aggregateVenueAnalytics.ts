@@ -56,7 +56,7 @@ export const aggregateVenueAnalytics = onSchedule(
     const date = toISTDate(yesterdayMs);
     console.log(`Aggregating analytics for date=${date}`);
 
-    // ── 1. Query all events from yesterday ───────────────────────────────────
+    // 1. Query all events from yesterday
     const snap = await db
       .collection('analyticsEvents')
       .where('date', '==', date)
@@ -67,7 +67,7 @@ export const aggregateVenueAnalytics = onSchedule(
       return;
     }
 
-    // ── 2. Group by venueId ──────────────────────────────────────────────────
+    // 2. Group by venueId
     const byVenue = new Map<string, VenueAnalyticsDailyDoc>();
     const uniqueByVenue = new Map<string, Set<string>>();
 
@@ -101,7 +101,7 @@ export const aggregateVenueAnalytics = onSchedule(
       }
     }
 
-    // ── 3. Write daily docs in batch ─────────────────────────────────────────
+    // 3. Write daily docs in batch
     const batch = db.batch();
     for (const [venueId, agg] of byVenue) {
       agg.uniqueUsers  = uniqueByVenue.get(venueId)?.size ?? 0;
@@ -112,7 +112,7 @@ export const aggregateVenueAnalytics = onSchedule(
     await batch.commit();
     console.log(`Daily rollup complete: ${byVenue.size} venues`);
 
-    // ── 4. Weekly rollup on Mondays ──────────────────────────────────────────
+    // 4. Weekly rollup on Mondays
     const dayOfWeek = new Date(date + 'T00:00:00Z').getUTCDay();
     if (dayOfWeek !== 1) return; // only Monday
 

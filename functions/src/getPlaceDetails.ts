@@ -126,7 +126,7 @@ export const getPlaceDetails = onCall(
       })),
     };
 
-    // ── Persist Google-owned fields back to /venues (fire-and-forget) ─────────
+    // Persist Google-owned fields back to /venues (fire-and-forget)
     // Uses { merge: true } so admin-managed fields (adminVibeTags, openingNote,
     // promotions, bannerUrl, discoveryEnabled, discoveryPriority) are never touched.
     const { getFirestore } = await import('firebase-admin/firestore');
@@ -160,7 +160,7 @@ export const getPlaceDetails = onCall(
   },
 );
 
-// ── Internal shape from Places API (New) ─────────────────────────────────────
+// Internal shape from Places API (New)
 
 interface PlacesApiPlaceDetail {
   id: string;

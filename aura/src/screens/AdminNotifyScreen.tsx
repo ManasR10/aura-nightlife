@@ -110,7 +110,7 @@ export function AdminNotifyScreen({ route, navigation }: Props) {
     }
   }
 
-  // ── Sent success screen ───────────────────────────────────────────────────
+  // Sent success screen
 
   if (sent) {
     return (
@@ -130,7 +130,7 @@ export function AdminNotifyScreen({ route, navigation }: Props) {
     );
   }
 
-  // ── Main screen ───────────────────────────────────────────────────────────
+  // Main screen
 
   return (
     <View style={[s.container, { paddingTop: insets.top }]}>
@@ -266,7 +266,7 @@ export function AdminNotifyScreen({ route, navigation }: Props) {
   );
 }
 
-// ── Styles ────────────────────────────────────────────────────────────────────
+// Styles
 
 const s = StyleSheet.create({
   container:   { flex: 1, backgroundColor: '#030712' },

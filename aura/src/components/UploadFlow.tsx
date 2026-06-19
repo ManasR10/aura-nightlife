@@ -28,7 +28,7 @@ import { COLORS, SPACING, RADIUS, FONT_SIZE, FONT_WEIGHT } from '../theme';
 import { getNearbyVenues, getTrendingVenues, type VenueResult } from '../services/venues';
 import { checkRecentSignal } from '../services/events';
 
-// ── Types ──────────────────────────────────────────────────────────────────────
+// Types
 
 export type VibeTag = 'hot' | 'okay' | 'slow';
 
@@ -113,7 +113,7 @@ export function UploadFlow({
     setUploadPct(0);
 
     try {
-      // ── 1. Get precise GPS at upload moment ──────────────────────────
+      // 1. Get precise GPS at upload moment
       const { latitude: userLat, longitude: userLng } = await new Promise<{ latitude: number; longitude: number }>(
         (resolve, reject) =>
           Geolocation.getCurrentPosition(
@@ -124,7 +124,7 @@ export function UploadFlow({
       );
       const locationTimestamp = Date.now();
 
-      // ── 2. Duplicate check ───────────────────────────────────────────
+      // 2. Duplicate check
       const { exists, minutesAgo } = await checkRecentSignal(uid, selectedVenue.placeId);
       if (exists) {
         const proceed = await new Promise<boolean>((resolve) =>
@@ -140,7 +140,7 @@ export function UploadFlow({
         if (!proceed) { setUploading(false); return; }
       }
 
-      // ── 3. Upload video to Firebase Storage ──────────────────────────
+      // 3. Upload video to Firebase Storage
       const ext = videoUri.split('.').pop() ?? 'mp4';
       const storagePath = `liveSignals/${uid}/${Date.now()}.${ext}`;
       const ref = storage().ref(storagePath);
@@ -153,7 +153,7 @@ export function UploadFlow({
       await task;
       const mediaUrl = await ref.getDownloadURL();
 
-      // ── 4. Generate + upload thumbnail (best-effort) ─────────────────
+      // 4. Generate + upload thumbnail (best-effort)
       let thumbnailRef: string | null = null;
       let thumbStorageRef: ReturnType<ReturnType<typeof storage>['ref']> | null = null;
       try {
@@ -166,7 +166,7 @@ export function UploadFlow({
         // Thumbnail generation is best-effort; proceed without it
       }
 
-      // ── 5. Submit signal — Cloud Function verifies geofence ──────────
+      // 5. Submit signal — Cloud Function verifies geofence
       // If submitLiveSignal rejects (geofence fail, rate limit, stale GPS),
       // clean up the orphan video + thumbnail so we don't leak Storage.
       try {
@@ -207,7 +207,7 @@ export function UploadFlow({
     }
   }, [videoUri, selectedVenue, selectedVibe, successScale, onUploadSuccess]);
 
-  // ── Success ────────────────────────────────────────────────────────────────
+  // Success
   if (done) {
     const vibe = VIBE_OPTIONS.find((v) => v.tag === selectedVibe)!;
     return (
@@ -228,7 +228,7 @@ export function UploadFlow({
     );
   }
 
-  // ── No video yet (camera cancelled or loading) ─────────────────────────────
+  // No video yet (camera cancelled or loading)
   if (!videoUri) {
     return (
       <View style={[flow.center, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
@@ -246,7 +246,7 @@ export function UploadFlow({
     ? venues.filter((v) => v.name.toLowerCase().includes(venueSearch.toLowerCase()))
     : venues;
 
-  // ── Upload screen ──────────────────────────────────────────────────────────
+  // Upload screen
   return (
     <KeyboardAvoidingView
       style={[flow.container, { paddingTop: insets.top }]}
@@ -374,7 +374,7 @@ export function UploadFlow({
   );
 }
 
-// ── Styles ─────────────────────────────────────────────────────────────────────
+// Styles
 
 const flow = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.bg },

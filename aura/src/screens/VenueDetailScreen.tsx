@@ -189,7 +189,7 @@ export function VenueDetailScreen({ route, navigation }: Props) {
     <View style={[styles.container, { paddingBottom: insets.bottom }]}>
       <ScrollView showsVerticalScrollIndicator={false}>
 
-        {/* ── Cover ──────────────────────────────────────────────────────── */}
+        {/* Cover */}
         <View style={styles.cover}>
           <Image source={{ uri: coverUri }} style={styles.coverImage} resizeMode="cover" />
           <View style={styles.coverOverlay} />
@@ -244,7 +244,7 @@ export function VenueDetailScreen({ route, navigation }: Props) {
 
         <View style={styles.body}>
 
-          {/* ── Identity row ───────────────────────────────────────────────── */}
+          {/* Identity row */}
           <View style={styles.identityRow}>
             <View style={styles.logoBox}>
               <Image source={{ uri: coverUri }} style={styles.logo} resizeMode="cover" />
@@ -273,7 +273,7 @@ export function VenueDetailScreen({ route, navigation }: Props) {
             </View>
           </View>
 
-          {/* ── CTAs ───────────────────────────────────────────────────────── */}
+          {/* CTAs */}
           <View style={styles.ctaSection}>
             <View style={styles.ctaRow}>
               <Pressable style={styles.ctaPrimary} onPress={handlePostClip}>
@@ -290,7 +290,7 @@ export function VenueDetailScreen({ route, navigation }: Props) {
             </View>
           </View>
 
-          {/* ── Quick info tiles ───────────────────────────────────────────── */}
+          {/* Quick info tiles */}
           {(live?.crowdLabel || live?.vibeLabel !== 'unknown') && (
             <View style={styles.tileRow}>
               {live?.crowdLabel ? (
@@ -310,7 +310,7 @@ export function VenueDetailScreen({ route, navigation }: Props) {
             </View>
           )}
 
-          {/* ── Policy badges ──────────────────────────────────────────────── */}
+          {/* Policy badges */}
           {(meta.dressCode || meta.ageLimit) && (
             <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.badgeScroll}>
               {meta.dressCode ? (
@@ -326,7 +326,7 @@ export function VenueDetailScreen({ route, navigation }: Props) {
             </ScrollView>
           )}
 
-          {/* ── Tab bar ────────────────────────────────────────────────────── */}
+          {/* Tab bar */}
           <View style={styles.tabBar}>
             {(['overview', 'events', 'media', 'info'] as TabId[]).map(tab => (
               <Pressable
@@ -341,7 +341,7 @@ export function VenueDetailScreen({ route, navigation }: Props) {
             ))}
           </View>
 
-          {/* ── Active tab ─────────────────────────────────────────────────── */}
+          {/* Active tab */}
           {activeTab === 'overview' && (
             <OverviewTab
               meta={meta}

@@ -9,13 +9,13 @@ import firestore from '@react-native-firebase/firestore';
 import type { VenueResult } from './venues';
 import { getTrendingVenues } from './venues';
 
-// ── Types ─────────────────────────────────────────────────────────────────────
+// Types
 
 export interface CatalogueVenue extends VenueResult {
   distanceKm: number;
 }
 
-// ── Haversine distance ────────────────────────────────────────────────────────
+// Haversine distance
 
 export function haversineKm(
   lat1: number, lng1: number,
@@ -31,7 +31,7 @@ export function haversineKm(
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-// ── Main loader ───────────────────────────────────────────────────────────────
+// Main loader
 
 /**
  * Load the full Mumbai venue catalogue from Firestore.
@@ -87,7 +87,7 @@ export async function loadCatalogue(
   }
 }
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
+// Helpers
 
 function attachDistance(
   venues: VenueResult[],

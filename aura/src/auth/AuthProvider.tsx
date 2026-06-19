@@ -34,7 +34,7 @@ function isPermanentAuthError(err: unknown): boolean {
 
 export type { EmailAuthResult } from '../services/auth';
 
-// ── Context shape ─────────────────────────────────────────────────────────────
+// Context shape
 
 interface AuthContextValue {
   authUser:      FirebaseAuthTypes.User | null;
@@ -58,7 +58,7 @@ interface AuthContextValue {
 
 export const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
-// ── Provider ──────────────────────────────────────────────────────────────────
+// Provider
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [authUser,      setAuthUser]      = useState<FirebaseAuthTypes.User | null>(null);

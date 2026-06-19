@@ -28,7 +28,7 @@ export const updateEventStatus = onSchedule(
     const batch = db.batch();
     let writes = 0;
 
-    // ── upcoming → ongoing ────────────────────────────────────────────────────
+    // upcoming → ongoing
     const toOngoing = await db.collection('events')
       .where('status', '==', 'upcoming')
       .where('source', '==', 'manual')
@@ -41,7 +41,7 @@ export const updateEventStatus = onSchedule(
       writes++;
     }
 
-    // ── ongoing → ended ───────────────────────────────────────────────────────
+    // ongoing → ended
     const toEnd = await db.collection('events')
       .where('status', '==', 'ongoing')
       .where('source', '==', 'manual')

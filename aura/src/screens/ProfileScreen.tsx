@@ -29,7 +29,7 @@ import {
 } from '../components/profile/atoms';
 import { SettingsPanel } from '../components/profile/SettingsPanel';
 
-// ── Types ─────────────────────────────────────────────────────────────────────
+// Types
 
 interface RewardItem {
   id:             string;
@@ -58,14 +58,14 @@ interface CheckInHistoryItem {
 
 type SectionKey = 'saved' | 'history' | 'settings' | null;
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
+// Helpers
 
 function formatNightKey(nightKey: string): string {
   const d = new Date(nightKey + 'T00:00:00');
   return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
 }
 
-// ── Screen ────────────────────────────────────────────────────────────────────
+// Screen
 
 interface Props {
   onNavigate: (venueId: string, venueName: string) => void;
@@ -98,7 +98,7 @@ export function ProfileScreen({ onNavigate }: Props) {
   const [editName,  setEditName]  = useState('');
   const [saving,    setSaving]    = useState(false);
 
-  // ── Load core data ──────────────────────────────────────────────────────────
+  // Load core data
 
   useEffect(() => {
     if (!authUser?.uid) return;
@@ -142,7 +142,7 @@ export function ProfileScreen({ onNavigate }: Props) {
     return () => { cancelled = true; };
   }, [authUser?.uid]);
 
-  // ── Lazy-load section data when opened ─────────────────────────────────────
+  // Lazy-load section data when opened
 
   useEffect(() => {
     if (openSection === 'saved' && !savedLoaded && authUser?.uid) {
@@ -199,7 +199,7 @@ export function ProfileScreen({ onNavigate }: Props) {
     }
   }, [openSection, userDoc, authUser?.displayName]);
 
-  // ── Actions ─────────────────────────────────────────────────────────────────
+  // Actions
 
   const toggleSection = useCallback((key: SectionKey) => {
     setOpenSection((cur) => (cur === key ? null : key));
@@ -235,7 +235,7 @@ export function ProfileScreen({ onNavigate }: Props) {
     try { await signOut(); } finally { setSigningOut(false); }
   }
 
-  // ── Derived ─────────────────────────────────────────────────────────────────
+  // Derived
 
   const userName      = userDoc?.displayName || authUser?.displayName || 'Aura User';
   const initials      = userName.trim()?.[0]?.toUpperCase() ?? 'A';
@@ -243,7 +243,7 @@ export function ProfileScreen({ onNavigate }: Props) {
   const level         = Math.min(Math.floor(checkinsDone / 5) + 1, 10);
   const inLevelDone   = checkinsDone % 5;
 
-  // ── Render ───────────────────────────────────────────────────────────────────
+  // Render
 
   return (
     <ScrollView
@@ -324,7 +324,7 @@ export function ProfileScreen({ onNavigate }: Props) {
         )}
       </View>
 
-      {/* ── Saved Venues ──────────────────────────────────────────────────────── */}
+      {/* Saved Venues */}
       <AccordionSection
         icon={<IconBookmark size={18} color={COLORS.purple400} />}
         title="Saved Venues"
@@ -362,7 +362,7 @@ export function ProfileScreen({ onNavigate }: Props) {
         )}
       </AccordionSection>
 
-      {/* ── Check-in History ──────────────────────────────────────────────────── */}
+      {/* Check-in History */}
       <AccordionSection
         icon={<Text style={s.sectionIconText}>◷</Text>}
         title="Check-in History"
@@ -397,7 +397,7 @@ export function ProfileScreen({ onNavigate }: Props) {
         )}
       </AccordionSection>
 
-      {/* ── Settings ──────────────────────────────────────────────────────────── */}
+      {/* Settings */}
       <AccordionSection
         icon={<IconSettings size={18} color={COLORS.purple400} />}
         title="Settings"
@@ -427,7 +427,7 @@ export function ProfileScreen({ onNavigate }: Props) {
   );
 }
 
-// ── Styles ────────────────────────────────────────────────────────────────────
+// Styles
 
 const s = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.bg },

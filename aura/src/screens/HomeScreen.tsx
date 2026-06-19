@@ -35,7 +35,7 @@ import { useAuth } from '../auth/useAuth';
 const { width: SW } = Dimensions.get('window');
 const BANNER_H = SW * 0.625; // 16:10 ratio matching Lovable design
 
-// ── Types ─────────────────────────────────────────────────────────────────────
+// Types
 
 export interface BannerItem {
   id:       string;
@@ -46,7 +46,7 @@ export interface BannerItem {
   venueId:  string | null;
 }
 
-// ── Placeholder banners (shown until real venue ads are created) ──────────────
+// Placeholder banners (shown until real venue ads are created)
 // Replace with real venue content by creating /banners docs in Firestore.
 
 const PLACEHOLDER_BANNERS: BannerItem[] = [
@@ -84,13 +84,13 @@ const PLACEHOLDER_BANNERS: BannerItem[] = [
   },
 ];
 
-// ── Aura options ──────────────────────────────────────────────────────────────
+// Aura options
 
 import { AURA_OPTIONS } from '../data/venues';
 
 const AURA_ITEM_W = (SW - SPACING.base * 2 - SPACING.sm * 2) / 3;
 
-// ── Component ─────────────────────────────────────────────────────────────────
+// Component
 
 interface Props {
   onVibeSelect:  (auraId: string) => void;
@@ -110,7 +110,7 @@ export function HomeScreen({ onVibeSelect, onNavigate }: Props) {
   const scrollRef = useRef<ScrollView>(null);
   const timerRef  = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // ── Load banners from Firestore ─────────────────────────────────────────────
+  // Load banners from Firestore
 
   useEffect(() => {
     const unsub = firestore()
@@ -135,7 +135,7 @@ export function HomeScreen({ onVibeSelect, onNavigate }: Props) {
     return unsub;
   }, []);
 
-  // ── Auto-advance carousel ───────────────────────────────────────────────────
+  // Auto-advance carousel
 
   useEffect(() => {
     if (banners.length <= 1) return;
@@ -166,7 +166,7 @@ export function HomeScreen({ onVibeSelect, onNavigate }: Props) {
     onVibeSelect(auraId);
   }
 
-  // ── Render ────────────────────────────────────────────────────────────────────
+  // Render
 
   return (
     <ScrollView
@@ -174,7 +174,7 @@ export function HomeScreen({ onVibeSelect, onNavigate }: Props) {
       contentContainerStyle={{ paddingBottom: insets.bottom + 90 }}
       showsVerticalScrollIndicator={false}
     >
-      {/* ── Header ───────────────────────────────────────────────────────── */}
+      {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <MapPin size={18} color={COLORS.purple400} />
@@ -188,7 +188,7 @@ export function HomeScreen({ onVibeSelect, onNavigate }: Props) {
         </View>
       </View>
 
-      {/* ── Hero banner carousel ─────────────────────────────────────────── */}
+      {/* Hero banner carousel */}
       <View style={styles.carouselWrap}>
         <ScrollView
           ref={scrollRef}
@@ -234,7 +234,7 @@ export function HomeScreen({ onVibeSelect, onNavigate }: Props) {
         </ScrollView>
       </View>
 
-      {/* ── Dots indicator ───────────────────────────────────────────────── */}
+      {/* Dots indicator */}
       <View style={styles.dotsRow}>
         {banners.map((_, i) => (
           <Pressable
@@ -249,7 +249,7 @@ export function HomeScreen({ onVibeSelect, onNavigate }: Props) {
         ))}
       </View>
 
-      {/* ── "What's Your Aura?" ──────────────────────────────────────────── */}
+      {/* "What's Your Aura?" */}
       <View style={styles.auraSection}>
         <View style={styles.auraDivider}>
           <View style={styles.divLine} />
@@ -289,7 +289,7 @@ export function HomeScreen({ onVibeSelect, onNavigate }: Props) {
   );
 }
 
-// ── Styles ────────────────────────────────────────────────────────────────────
+// Styles
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.bg },

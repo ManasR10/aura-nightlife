@@ -184,7 +184,7 @@ export function SettingsPanel({
   );
 }
 
-// ── Sub-components ─────────────────────────────────────────────────────────────
+// Sub-components
 
 function SettingsSection({
   label, children, danger,
@@ -277,7 +277,7 @@ function InlineEditor({
   );
 }
 
-// ── Styles ─────────────────────────────────────────────────────────────────────
+// Styles
 
 const sp = StyleSheet.create({
   wrap:        { paddingTop: SPACING.md, gap: SPACING.lg },

@@ -32,7 +32,7 @@ import type { RootStackParamList, VenueLive } from '../../types';
 import type { VenueOption } from '../AdminDashboardScreen';
 import auth from '@react-native-firebase/auth';
 
-// ── Types ─────────────────────────────────────────────────────────────────────
+// Types
 
 interface Props {
   navigation:    NativeStackNavigationProp<RootStackParamList, 'AdminDashboard'>;
@@ -81,7 +81,7 @@ function fmt(n: number): string {
   return String(n);
 }
 
-// ── Animated counter ──────────────────────────────────────────────────────────
+// Animated counter
 
 function useCountAnim(target: number) {
   const anim    = useRef(new Animated.Value(0)).current;
@@ -94,7 +94,7 @@ function useCountAnim(target: number) {
   return anim;
 }
 
-// ── Component ─────────────────────────────────────────────────────────────────
+// Component
 
 export function AdminHomeTab({ navigation, venue, venues, onSwitchVenue, onGoToFeed }: Props) {
   const insets = useSafeAreaInsets();
@@ -193,7 +193,7 @@ export function AdminHomeTab({ navigation, venue, venues, onSwitchVenue, onGoToF
         />
       }
     >
-      {/* ── Venue identity bar ──────────────────────────────────────── */}
+      {/* Venue identity bar */}
       <View style={s.identityBar}>
         <View style={{ flex: 1 }}>
           <Pressable
@@ -214,7 +214,7 @@ export function AdminHomeTab({ navigation, venue, venues, onSwitchVenue, onGoToF
         </View>
       </View>
 
-      {/* ── Live status card ─────────────────────────────────────────── */}
+      {/* Live status card */}
       <View style={s.liveCard}>
         <View style={s.liveCardTop}>
           <Text style={s.liveTime}>{timeStr} · Live</Text>
@@ -251,7 +251,7 @@ export function AdminHomeTab({ navigation, venue, venues, onSwitchVenue, onGoToF
         )}
       </View>
 
-      {/* ── Quick actions ─────────────────────────────────────────────── */}
+      {/* Quick actions */}
       <View style={s.quickGrid}>
         {QUICK_ACTIONS.map((qa) => (
           <Pressable
@@ -265,7 +265,7 @@ export function AdminHomeTab({ navigation, venue, venues, onSwitchVenue, onGoToF
         ))}
       </View>
 
-      {/* ── Weekly analytics ──────────────────────────────────────────── */}
+      {/* Weekly analytics */}
       <View style={s.analyticsBlock}>
         <Text style={s.analyticsTitle}>This Week</Text>
         {weekly ? (
@@ -295,7 +295,7 @@ export function AdminHomeTab({ navigation, venue, venues, onSwitchVenue, onGoToF
         )}
       </View>
 
-      {/* ── Recent clips strip ────────────────────────────────────────── */}
+      {/* Recent clips strip */}
       <View style={s.sectionBlock}>
         <View style={s.sectionHd}>
           <Text style={s.sectionTitle}>Recent Clips</Text>
@@ -326,7 +326,7 @@ export function AdminHomeTab({ navigation, venue, venues, onSwitchVenue, onGoToF
 
       <View style={{ height: SPACING.xxxl }} />
 
-      {/* ── Venue picker modal ────────────────────────────────────────── */}
+      {/* Venue picker modal */}
       <Modal visible={pickerOpen} transparent animationType="slide" onRequestClose={() => setPickerOpen(false)}>
         <Pressable style={s.pickerBackdrop} onPress={() => setPickerOpen(false)}>
           <View style={s.pickerSheet}>
@@ -352,7 +352,7 @@ export function AdminHomeTab({ navigation, venue, venues, onSwitchVenue, onGoToF
   );
 }
 
-// ── Sub-components ────────────────────────────────────────────────────────────
+// Sub-components
 
 function MetricCard({
   emoji, label, value, sub, highlight,
@@ -431,7 +431,7 @@ const tc = StyleSheet.create({
   time:  { color: '#6b7280', fontSize: 10 },
 });
 
-// ── Styles ────────────────────────────────────────────────────────────────────
+// Styles
 
 const s = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#030712' },

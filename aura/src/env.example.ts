@@ -7,7 +7,7 @@
  *
  * src/env.ts is gitignored — your real keys will never be committed.
  *
- * ─── Where to find each value ──────────────────────────────────────────────
+ *  Where to find each value
  *
  * PLACES_PHOTO_API_KEY
  *   Google Cloud Console → APIs & Services → Credentials

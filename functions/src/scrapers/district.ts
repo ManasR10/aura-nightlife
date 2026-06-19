@@ -152,7 +152,7 @@ export async function scrapeDistrict(): Promise<RawScrapedEvent[]> {
         } catch { /* skip */ }
       }
 
-      // ── 1. __NEXT_DATA__ (primary for Next.js apps) ────────────────────────
+      // 1. __NEXT_DATA__ (primary for Next.js apps)
       const nextDataMatch = /__NEXT_DATA__\s*=\s*({[\s\S]*?})<\/script>/i.exec(html);
       if (nextDataMatch) {
         try {
@@ -203,7 +203,7 @@ export async function scrapeDistrict(): Promise<RawScrapedEvent[]> {
         }
       }
 
-      // ── 2. JSON-LD fallback ────────────────────────────────────────────────
+      // 2. JSON-LD fallback
       const jsonLdRegex = /<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi;
       let match: RegExpExecArray | null;
       while ((match = jsonLdRegex.exec(html)) !== null) {

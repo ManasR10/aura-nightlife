@@ -88,7 +88,7 @@ export function ExploreScreen({ onNavigate, selectedVibe, onClearVibe }: Props) 
     return () => { mountedRef.current = false; };
   }, []);
 
-  // ── Load catalogue ─────────────────────────────────────────────────────────
+  // Load catalogue
   //
   // Wait for the first GPS fix (with a short timeout fallback) before calling
   // loadCatalogue, so nearest-first sorting uses real coordinates instead of
@@ -156,7 +156,7 @@ export function ExploreScreen({ onNavigate, selectedVibe, onClearVibe }: Props) 
     return () => { cancelled = true; };
   }, []);
 
-  // ── Saved IDs ─────────────────────────────────────────────────────────────
+  // Saved IDs
 
   useEffect(() => {
     const uid = auth().currentUser?.uid;
@@ -167,7 +167,7 @@ export function ExploreScreen({ onNavigate, selectedVibe, onClearVibe }: Props) 
       .catch(() => {});
   }, []);
 
-  // ── Debounced search ──────────────────────────────────────────────────────
+  // Debounced search
 
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
@@ -217,7 +217,7 @@ export function ExploreScreen({ onNavigate, selectedVibe, onClearVibe }: Props) 
     return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
   }, [search]);
 
-  // ── Save / unsave ─────────────────────────────────────────────────────────
+  // Save / unsave
 
   const toggleSave = useCallback((venueId: string, venueName: string) => {
     const uid = auth().currentUser?.uid;
@@ -238,7 +238,7 @@ export function ExploreScreen({ onNavigate, selectedVibe, onClearVibe }: Props) 
     });
   }, []);
 
-  // ── Derived display list ──────────────────────────────────────────────────
+  // Derived display list
 
   const isSearching = search.trim().length >= 3;
 
@@ -278,7 +278,7 @@ export function ExploreScreen({ onNavigate, selectedVibe, onClearVibe }: Props) 
 
   const loading = catalogueLoading || (isSearching && searchLoading && !searchResults);
 
-  // ── Render ────────────────────────────────────────────────────────────────
+  // Render
 
   return (
     <ScrollView
@@ -466,7 +466,7 @@ export function ExploreScreen({ onNavigate, selectedVibe, onClearVibe }: Props) 
   );
 }
 
-// ── Styles ────────────────────────────────────────────────────────────────────
+// Styles
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.bg },

@@ -16,7 +16,7 @@ import {
 } from 'react-native';
 import { ArrowRight } from 'lucide-react-native';
 
-// ── Palette ────────────────────────────────────────────────────────────────────
+// Palette
 
 export const BG   = '#030712';
 export const CARD = '#111827';
@@ -27,7 +27,7 @@ export const WHT  = '#ffffff';
 export const GR4  = '#9ca3af';
 export const GR5  = '#6b7280';
 
-// ── Primitives ─────────────────────────────────────────────────────────────────
+// Primitives
 
 export function Field({
   icon, placeholder, value, onChangeText, style,
@@ -108,7 +108,7 @@ export function GoogleG() {
   );
 }
 
-// ── Stylesheet ─────────────────────────────────────────────────────────────────
+// Stylesheet
 
 export const authStyles = StyleSheet.create({
   root:   { flex: 1, backgroundColor: BG },

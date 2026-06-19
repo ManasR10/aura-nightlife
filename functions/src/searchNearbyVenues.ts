@@ -93,7 +93,7 @@ export const searchNearbyVenues = onCall(
     const db = getFirestore();
     const oneHourAgo = Timestamp.fromMillis(Date.now() - CACHE_TTL_MS);
 
-    // ── 1. Try Firestore cache ──────────────────────────────────────────────
+    // 1. Try Firestore cache
     const cacheSnap = await db
       .collection('venues')
       .where('lastFetchedAt', '>', oneHourAgo)
@@ -109,7 +109,7 @@ export const searchNearbyVenues = onCall(
       return { venues: cached, source: 'cache' };
     }
 
-    // ── 2. Cache cold — call Places API ────────────────────────────────────
+    // 2. Cache cold — call Places API
     const apiKey = process.env.PLACES_API_KEY;
     if (!apiKey) throw new HttpsError('internal', 'Places API key not configured.');
 
@@ -145,10 +145,10 @@ export const searchNearbyVenues = onCall(
     const data = await response.json() as { places?: PlacesApiPlace[] };
     const places = data.places ?? [];
 
-    // ── 3. Upsert to Firestore in parallel ─────────────────────────────────
+    // 3. Upsert to Firestore in parallel
     await Promise.all(places.map((p) => upsertVenueFromPlace(p)));
 
-    // ── 4. Return fresh docs from Firestore ────────────────────────────────
+    // 4. Return fresh docs from Firestore
     const freshSnap = await db
       .collection('venues')
       .where('lastFetchedAt', '>', Timestamp.fromMillis(Date.now() - 10_000))

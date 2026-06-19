@@ -13,7 +13,7 @@ import type { UserPreferences } from '../types';
 
 export type EmailAuthResult = 'logged_in' | 'created';
 
-// ── Google Sign-In (lazy import — large native module) ────────────────────────
+// Google Sign-In (lazy import — large native module)
 
 let googleConfigured = false;
 
@@ -27,7 +27,7 @@ async function getGoogleSigninModule() {
   return googleSignin;
 }
 
-// ── Phone helpers ─────────────────────────────────────────────────────────────
+// Phone helpers
 
 export class InvalidPhoneError extends Error {
   constructor() {
@@ -49,7 +49,7 @@ function normalizeIndianPhone(phone: string): string {
   throw new InvalidPhoneError();
 }
 
-// ── Exported auth operations ──────────────────────────────────────────────────
+// Exported auth operations
 
 export function sendOtp(phone: string): Promise<FirebaseAuthTypes.ConfirmationResult> {
   return auth().signInWithPhoneNumber(normalizeIndianPhone(phone));
@@ -104,7 +104,7 @@ export async function signOut(): Promise<void> {
   await auth().signOut();
 }
 
-// ── Profile mutations ─────────────────────────────────────────────────────────
+// Profile mutations
 // These write to Firestore/Auth and return. State updates are the caller's job.
 
 const DISPLAY_NAME_MAX = 50;

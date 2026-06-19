@@ -17,7 +17,7 @@ import { GOOGLE_WEB_CLIENT_ID } from '../../firebase/googleConfig';
 
 const GOOGLE_AVAILABLE = !!GOOGLE_WEB_CLIENT_ID;
 
-// ── LoginMain ─────────────────────────────────────────────────────────────────
+// LoginMain
 
 interface LoginMainProps {
   email: string; onEmail: (v: string) => void;
@@ -107,7 +107,7 @@ export function LoginMain({
   );
 }
 
-// ── PhoneEntry ────────────────────────────────────────────────────────────────
+// PhoneEntry
 
 export function PhoneEntry({ phone, onPhone, loading, error, onSend, onBack }: {
   phone: string; onPhone: (v: string) => void;
@@ -143,7 +143,7 @@ export function PhoneEntry({ phone, onPhone, loading, error, onSend, onBack }: {
   );
 }
 
-// ── OtpEntry ──────────────────────────────────────────────────────────────────
+// OtpEntry
 
 export function OtpEntry({ otp, onOtp, phone, loading, error, onVerify, onBack }: {
   otp: string; onOtp: (v: string) => void; phone: string;
@@ -178,7 +178,7 @@ export function OtpEntry({ otp, onOtp, phone, loading, error, onVerify, onBack }
   );
 }
 
-// ── ForgotPassword ────────────────────────────────────────────────────────────
+// ForgotPassword
 
 export function ForgotEntry({ email, onEmail, loading, error, onSend, onBack }: {
   email: string; onEmail: (v: string) => void;

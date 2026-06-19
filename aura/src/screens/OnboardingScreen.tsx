@@ -21,7 +21,7 @@ import type { UserPreferences } from '../types';
 
 const { width: SCREEN_W } = Dimensions.get('window');
 
-// ── Slides data ───────────────────────────────────────────────────────────────
+// Slides data
 
 const SLIDES = [
   {
@@ -44,12 +44,12 @@ const SLIDES = [
   },
 ];
 
-// ── Aura mood options (canonical list in src/data/venues.ts) ──────────────────
+// Aura mood options (canonical list in src/data/venues.ts)
 
 import { AURA_OPTIONS } from '../data/venues';
 import { MIN_AGE } from '../utils/age';
 
-// ── Component ─────────────────────────────────────────────────────────────────
+// Component
 
 export function OnboardingScreen() {
   const insets = useSafeAreaInsets();
@@ -97,7 +97,7 @@ export function OnboardingScreen() {
     }
   }
 
-  // ── Render each slide ───────────────────────────────────────────────────────
+  // Render each slide
 
   function renderSlide({ item: _item, index }: { item: typeof SLIDES[0] | null; index: number }) {
     // Last slide = preferences picker
@@ -224,7 +224,7 @@ export function OnboardingScreen() {
   );
 }
 
-// ── Styles ────────────────────────────────────────────────────────────────────
+// Styles
 
 const VIBE_GAP = SPACING.md;
 const VIBE_COLS = 3;
@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
   dotActive:   { width: 20, backgroundColor: COLORS.purple400 },
   dotInactive: { width: 6,  backgroundColor: COLORS.borderLight },
 
-  // ── Intro slides
+  // Intro slides
   slide: {
     flex: 1,
     alignItems: 'center',
@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.xl,
   },
 
-  // ── Preferences slide
+  // Preferences slide
   prefTitle: {
     color: COLORS.text,
     fontSize: FONT_SIZE.display,
@@ -339,7 +339,7 @@ const styles = StyleSheet.create({
     fontWeight: FONT_WEIGHT.bold,
   },
 
-  // ── Buttons
+  // Buttons
   primaryBtn: {
     alignSelf: 'stretch',
     backgroundColor: COLORS.purple600,
