@@ -1,0 +1,240 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Helpers ────────────────────────────────────────────────────────────
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    function isVenueAdmin() {
+      return isSignedIn() &&
+        exists(/databases/$(database)/documents/venueAdmins/$(request.auth.uid));
+    }
+
+    function managesVenue(venueId) {
+      return isVenueAdmin() &&
+        venueId in get(/databases/$(database)/documents/venueAdmins/$(request.auth.uid)).data.managedVenueIds;
+    }
+
+    function isValidUserDoc() {
+      return request.resource.data.keys().hasOnly([
+        'uid',
+        'phoneNumber',
+        'displayName',
+        'profilePhoto',
+        'upiId',
+        'rewardsBalance',
+        'totalEarned',
+        'role',
+        'accountStatus',
+        'profileCompleted',
+        'onboardingCompleted',
+        'fcmToken',
+        'preferences',
+        'ageConfirmed',
+        'termsAcceptedAt',
+        'createdAt',
+        'lastLoginAt',
+      ]);
+    }
+
+    // ── Users ──────────────────────────────────────────────────────────────
+    match /users/{userId} {
+      // Fix 1: owner-only read — phone, UPI ID, FCM token must not be
+      // readable by other signed-in users.
+      allow read: if isOwner(userId);
+
+      allow create: if isOwner(userId)
+                    && isValidUserDoc()
+                    && request.resource.data.rewardsBalance == 0
+                    && request.resource.data.totalEarned == 0
+                    && request.resource.data.role == 'user'
+                    && request.resource.data.accountStatus == 'active';
+
+      // Fix 7: lock server-managed fields and whitelist the keys a client is
+      // allowed to touch in a single update. Anything else (role, balance,
+      // phone, createdAt, accountStatus) requires a Cloud Function.
+      // Exception: clients may initialise accountStatus from null → 'active'
+      // exactly once (schema migration for pre-accountStatus user docs).
+      allow update: if isOwner(userId)
+                    && isValidUserDoc()
+                    && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+                         'displayName',
+                         'profilePhoto',
+                         'upiId',
+                         'profileCompleted',
+                         'onboardingCompleted',
+                         'ageConfirmed',
+                         'termsAcceptedAt',
+                         'preferences',
+                         'fcmToken',
+                         'lastLoginAt',
+                         'accountStatus',  // only via the one-time migration below
+                       ])
+                    && request.resource.data.rewardsBalance == resource.data.rewardsBalance
+                    && request.resource.data.totalEarned == resource.data.totalEarned
+                    && request.resource.data.role == resource.data.role
+                    && request.resource.data.createdAt == resource.data.createdAt
+                    && request.resource.data.phoneNumber == resource.data.phoneNumber
+                    && (resource.data.get('accountStatus', null) == null
+                        ? request.resource.data.accountStatus == 'active'
+                        : request.resource.data.accountStatus == resource.data.accountStatus);
+
+      allow delete: if false;
+
+      // Saved venues subcollection — users/{uid}/savedVenues/{venueId}
+      // Subcollection rules are NOT inherited from the parent match block;
+      // they must be declared explicitly.
+      match /savedVenues/{venueId} {
+        allow read:   if isOwner(userId);
+        allow create: if isOwner(userId)
+                      && request.resource.data.keys().hasOnly(['savedAt', 'venueName', 'placeId'])
+                      && request.resource.data.placeId == venueId;
+        allow delete: if isOwner(userId);
+        allow update: if false;  // save is create-or-delete, never update
+      }
+    }
+
+    // ── Venue Admins (/venueAdmins/{uid}) ──────────────────────────────────
+    // Written by Cloud Functions / manual provisioning only.
+    // Admins can read their own doc (to know which venues they manage).
+    match /venueAdmins/{uid} {
+      allow read: if isOwner(uid);
+      allow write: if false;   // Cloud Functions / manual only
+    }
+
+    // ── Venues (/venues/{venueId}) ─────────────────────────────────────────
+    // Core identity fields are read-only everywhere — written by Cloud Functions.
+    // Admin-enrichment fields can be updated by the managing venue admin
+    // via adminUpdateVenue Cloud Function (server-side field whitelist enforced).
+    match /venues/{venueId} {
+      allow read: if isSignedIn();
+      // Direct client writes blocked — use adminUpdateVenue callable instead
+      allow write: if false;
+    }
+
+    // ── Venue Live State (/venueLive/{venueId}) ────────────────────────────
+    // Anyone signed in can read. Written only by Cloud Functions.
+    match /venueLive/{venueId} {
+      allow read: if isSignedIn();
+      allow write: if false;
+    }
+
+    // ── Events (/events/{eventId}) ─────────────────────────────────────────
+    // Read-only for users. Venue admins can create manual events for their venues.
+    match /events/{eventId} {
+      allow read: if isSignedIn();
+      // Venue admins may write events for venues they manage — full validation
+      // is done in the adminSubmitSignal callable; direct writes are blocked.
+      allow write: if false;
+    }
+
+    // ── Live Signals (/liveSignals/{signalId}) ─────────────────────────────
+    // Users create signals via submitLiveSignal callable (server enforces geo).
+    // Direct writes blocked to prevent weight/geoVerified tampering.
+    // Exception: venue admins may increment viewCount on their venue's signals.
+    match /liveSignals/{signalId} {
+      allow read: if isSignedIn();
+      allow write: if false;   // submitLiveSignal / adminSubmitSignal only
+      allow update: if isVenueAdmin()
+        && managesVenue(resource.data.venueId)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['viewCount']);
+    }
+
+    // ── Check-ins (/checkins/{checkinId}) ─────────────────────────────────
+    // A check-in document carries the user's UPI ID and reward amount in some
+    // historical schemas, so reads must be restricted to the owner or the
+    // venue admin who would fulfil the reward.
+    match /checkins/{checkinId} {
+      allow read: if isSignedIn() &&
+        (isOwner(resource.data.userId) || managesVenue(resource.data.venueId));
+      allow create: if isOwner(request.resource.data.userId)
+                    && request.resource.data.verified == false
+                    && request.resource.data.rewardAmount == 0;
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    // ── Banner Ads (/banners/{bannerId}) ──────────────────────────────────
+    // Active banners are readable by all signed-in users (HomeScreen carousel).
+    // Venue admins can submit banners for review; only ops can set active: true.
+    match /banners/{bannerId} {
+      allow read:   if isSignedIn() && resource.data.active == true;
+      allow create: if isVenueAdmin()
+        && request.resource.data.active == false  // must start inactive (pending review)
+        && request.resource.data.createdBy == request.auth.uid;
+      allow update: if false;   // ops only via Admin SDK
+      allow delete: if false;
+    }
+
+    // ── Venue Notify Log (/venueNotifyLog/{docId}) ────────────────────────
+    // Written by sendVenueNotification CF only. Admins can read their own logs.
+    match /venueNotifyLog/{docId} {
+      allow read:  if isVenueAdmin();
+      allow write: if false;
+    }
+
+    // ── Check-in Sessions (/checkInSessions/{sessionId}) ─────────────────
+    // Session ID = "{uid}_{venueId}_{nightKey}". Written only by Cloud Functions.
+    // Users may read their own sessions (matched by the uid prefix in the doc ID).
+    match /checkInSessions/{sessionId} {
+      allow read:  if isSignedIn() && sessionId.matches('^' + request.auth.uid + '_.*');
+      allow write: if false;  // startCheckIn / submitLiveSignal / claimSessionReward only
+    }
+
+    // ── Venue Rewards (/venueRewards/{rewardId}) ──────────────────────────
+    // All signed-in users can read (so ClaimRewardScreen can preview the reward).
+    // Writes are blocked client-side — adminCreateVenueReward CF only.
+    match /venueRewards/{rewardId} {
+      allow read:  if isSignedIn();
+      allow write: if false;   // adminCreateVenueReward / adminDeactivateVenueReward CF only
+    }
+
+    // ── Reward Claims (/rewardClaims/{claimId}) ────────────────────────────
+    // Immutable. User reads own; venue admin reads their venue's claims.
+    // Written only by claimSessionReward CF.
+    match /rewardClaims/{claimId} {
+      allow read: if isSignedIn() &&
+        (resource.data.uid == request.auth.uid ||
+         managesVenue(resource.data.venueId));
+      allow write: if false;   // claimSessionReward CF only
+    }
+
+    // ── Analytics Events (/analyticsEvents/{eventId}) ─────────────────────
+    // Signed-in users can write their own events (fire-and-forget tracker).
+    // Reads are blocked on the client — only Cloud Functions read these.
+    match /analyticsEvents/{eventId} {
+      allow create: if isSignedIn()
+                    && request.resource.data.userId == request.auth.uid
+                    && request.resource.data.keys().hasAll(['type', 'venueId', 'userId', 'sessionId', 'occurredAt', 'date', 'metadata']);
+      allow read, update, delete: if false;
+    }
+
+    // ── Venue Analytics Daily (/venueAnalyticsDaily/{venueId}_{date}) ────
+    // Doc ID format: {venueId}_{YYYY-MM-DD}. The doc also carries venueId as
+    // a field, so we check managesVenue(resource.data.venueId) — admins can
+    // only read analytics for venues they actually manage, not all venues.
+    match /venueAnalyticsDaily/{docId} {
+      allow read:  if managesVenue(resource.data.venueId);
+      allow write: if false;
+    }
+
+    // ── Venue Analytics Weekly (/venueAnalyticsWeekly/{venueId}_{week}) ──
+    match /venueAnalyticsWeekly/{docId} {
+      allow read:  if managesVenue(resource.data.venueId);
+      allow write: if false;
+    }
+
+    // ── Super Admins (/superAdmins/{uid}) ─────────────────────────────────
+    // Read by Cloud Functions only (gates seed* + platform-reward callables).
+    // No client access.
+    match /superAdmins/{uid} {
+      allow read, write: if false;
+    }
+  }
+}

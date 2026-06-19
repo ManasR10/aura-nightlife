@@ -1,0 +1,93 @@
+# ────────────────────────────────────────────────────────────────────────────
+# OS / editor
+# ────────────────────────────────────────────────────────────────────────────
+.DS_Store
+*.swp
+.vscode/settings.json
+.idea/
+
+# ────────────────────────────────────────────────────────────────────────────
+# Node / package managers (both /aura and /functions install separately)
+# ────────────────────────────────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-error.log*
+.npm/
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# ────────────────────────────────────────────────────────────────────────────
+# Local secrets — NEVER COMMIT
+# ────────────────────────────────────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+aura/src/env.ts
+
+# Firebase client config — download from Firebase Console per developer
+# (Project Settings → Your apps → google-services.json / GoogleService-Info.plist).
+# Keeping these out of git means every new collaborator must be explicitly
+# added to the Firebase project before they can build.
+aura/android/app/google-services.json
+aura/ios/GoogleService-Info.plist
+
+# Android signing
+*.keystore
+!aura/android/app/debug.keystore
+aura/android/keystore.properties
+aura/android/gradle.properties
+
+# iOS provisioning + sensitive plist
+*.mobileprovision
+*.p12
+*.p8
+*.cer
+aura/ios/fastlane/report.xml
+aura/ios/fastlane/Preview.html
+
+# ────────────────────────────────────────────────────────────────────────────
+# React Native / Metro build outputs
+# ────────────────────────────────────────────────────────────────────────────
+aura/.metro-health-check*
+
+# Android build artefacts
+aura/android/.gradle/
+aura/android/build/
+aura/android/app/build/
+aura/android/local.properties
+aura/android/captures/
+aura/android/.cxx/
+*.hprof
+aura/android/app/release/
+aura/android/app/debug/
+
+# iOS build artefacts
+aura/ios/build/
+aura/ios/Pods/
+aura/ios/DerivedData/
+aura/ios/Podfile.lock.backup
+aura/ios/*.xcworkspace/xcuserdata/
+aura/ios/*.xcodeproj/xcuserdata/
+aura/ios/*.xcodeproj/project.xcworkspace/xcuserdata/
+aura/vendor/bundle/
+
+# Bundled JS
+aura/android/app/src/main/assets/index.android.bundle
+aura/android/app/src/main/assets/index.android.bundle.meta
+
+# Coverage / test artefacts
+**/coverage/
+
+# ────────────────────────────────────────────────────────────────────────────
+# Firebase
+# ────────────────────────────────────────────────────────────────────────────
+.firebase/
+firebase-debug.log*
+firestore-debug.log*
+database-debug.log*
+ui-debug.log*
+functions/lib/

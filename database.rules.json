@@ -1,0 +1,31 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+
+    "liveCrowds": {
+      ".read": "auth != null",
+      "$venueId": {
+        "count":       { ".write": false },
+        "lastUpdated": { ".write": false },
+        "activeUsers": {
+          "$userId": {
+            ".write": "auth != null && auth.uid == $userId",
+            ".validate": "newData.isNumber() || newData.val() == null"
+          }
+        }
+      }
+    },
+
+    "liveUpdates": {
+      ".read": "auth != null",
+      "$venueId": {
+        "$updateId": {
+          ".write": "auth != null && (!data.exists() ? newData.child('userId').val() == auth.uid : data.child('userId').val() == auth.uid)",
+          ".validate": "newData.hasChildren(['userId', 'message', 'timestamp', 'expiresAt']) && newData.child('userId').val() == auth.uid && newData.child('message').isString() && newData.child('message').val().length <= 280 && newData.child('timestamp').isNumber() && newData.child('expiresAt').isNumber()",
+          "$other": { ".validate": false }
+        }
+      }
+    }
+  }
+}

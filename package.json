@@ -1,0 +1,17 @@
+{
+  "name": "aura-monorepo",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "app:start": "npm start --prefix aura",
+    "app:android": "npm run android --prefix aura",
+    "app:ios": "npm run ios --prefix aura",
+    "app:test": "npm test --prefix aura",
+    "app:lint": "npm run lint --prefix aura",
+    "functions:build": "npm run build --prefix functions",
+    "functions:build:watch": "npm run build:watch --prefix functions",
+    "functions:serve": "npm run serve --prefix functions",
+    "functions:deploy": "npm run deploy --prefix functions",
+    "functions:lint": "npm run lint --prefix functions"
+  }
+}

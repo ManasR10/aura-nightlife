@@ -1,0 +1,9 @@
+{
+  "java.import.exclusions": [
+    "**/node_modules/**",
+    "**/android/build/**",
+    "**/android/.gradle/**"
+  ],
+  "java.project.sourcePaths": [],
+  "java.configuration.updateBuildConfiguration": "disabled"
+}

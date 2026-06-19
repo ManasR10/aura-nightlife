@@ -1,0 +1,49 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // ── Profile photos ─────────────────────────────────────────────────────
+    match /profiles/{userId}/{allPaths=**} {
+      allow read: if request.auth != null;
+      allow write: if request.auth.uid == userId
+                   && request.resource.size < 5 * 1024 * 1024  // 5 MB
+                   && request.resource.contentType.matches('image/.*');
+    }
+
+    // ── Check-in media (photos + videos) ───────────────────────────────────
+    match /checkins/{userId}/{allPaths=**} {
+      allow read: if request.auth != null;
+      allow write: if request.auth.uid == userId
+                   && request.resource.size < 50 * 1024 * 1024  // 50 MB
+                   && (request.resource.contentType.matches('image/.*')
+                       || request.resource.contentType.matches('video/.*'));
+    }
+
+    // ── Live signal videos (UploadFlow uploads here) ───────────────────────
+    // Path: liveSignals/{uid}/{timestamp}.{ext}
+    // After upload, the download URL is passed to the submitLiveSignal Cloud
+    // Function which writes the liveSignals Firestore doc (server-side).
+    match /liveSignals/{userId}/{fileName} {
+      // Any signed-in user can read videos for the feed.
+      allow read: if request.auth != null;
+      // Only the uploader can write; cap at 150 MB (≈ 30 s at high quality).
+      allow write: if request.auth.uid == userId
+                   && request.resource.size < 150 * 1024 * 1024
+                   && request.resource.contentType.matches('video/.*');
+      // Failed submissions clean up their own uploads; expired media is
+      // garbage-collected by a scheduled Cloud Function.
+      allow delete: if request.auth.uid == userId;
+    }
+
+    // ── Live signal thumbnails ──────────────────────────────────────────────
+    // Path: liveSignals/{uid}/thumbs/{timestamp}.jpg
+    // Uploaded right after the video by UploadFlow.createThumbnail.
+    match /liveSignals/{userId}/thumbs/{fileName} {
+      allow read: if request.auth != null;
+      allow write: if request.auth.uid == userId
+                   && request.resource.size < 5 * 1024 * 1024
+                   && request.resource.contentType.matches('image/.*');
+      allow delete: if request.auth.uid == userId;
+    }
+  }
+}
