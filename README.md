@@ -70,7 +70,7 @@ xs/
 
 ## First-time setup
 
-> **Before you start:** the Firebase + GCP project the codebase references (`aura-app-ee15d`, project number `245062000701`) lives on the original developer's personal Google account and is **not** being transferred. Create your own Firebase project (Blaze plan, region `asia-south1` for Firestore + Functions, `asia-southeast1` for Realtime DB) using the same bundle ID `com.nightlife.auraapp`. Enable Phone + Email + Google sign-in, Firestore, Realtime DB, Cloud Storage, Cloud Messaging. In GCP, enable Places API (New), Maps SDKs (Android + iOS), Geocoding API, and Play Integrity API. Then update `.firebaserc` with your new project ID.
+> **Before you start:** this app needs its own Firebase + GCP project — create one (it's **not** shared). Spin up a Firebase project (Blaze plan, region `asia-south1` for Firestore + Functions, `asia-southeast1` for Realtime DB) using the bundle ID `com.nightlife.auraapp`. Enable Phone + Email + Google sign-in, Firestore, Realtime DB, Cloud Storage, Cloud Messaging. In GCP, enable Places API (New), Maps SDKs (Android + iOS), Geocoding API, and Play Integrity API. Then update `.firebaserc` with your new project ID.
 
 ```bash
 # 1. Clone and install
@@ -250,7 +250,7 @@ Build the release APK, share it via Drive / WhatsApp / Telegram / WeTransfer. Te
 ```bash
 firebase appdistribution:distribute \
   /Users/.../aura/android/app/build/outputs/apk/release/app-release.apk \
-  --app 1:245062000701:android:<from-firebase-console> \
+  --app 1:<your-project-number>:android:<from-firebase-console> \
   --groups trusted-testers \
   --release-notes "Beta build $(date +%Y-%m-%d)"
 ```
@@ -483,14 +483,14 @@ Quick summary of what's NOT done and needs to be picked up:
 
 ---
 
-## Quick reference — bundle IDs + original dev's project values
+## Quick reference — bundle IDs + project values
 
-Bundle IDs are baked into the codebase. The Firebase project IDs below are the **original developer's** — documented so you can recognise references in code/configs and replace them with your own values.
+Bundle IDs are baked into the codebase. The Firebase project values are per-developer — create your own project and plug in your values.
 
-| Used by | Original dev's value | Your action |
+| Used by | Value | Your action |
 |---|---|---|
-| Firebase project ID | `aura-app-ee15d` | Replace in `.firebaserc` and `firebase use` |
-| Firebase project number | `245062000701` | Visible in your own `google-services.json` after setup |
+| Firebase project ID | `<your-project-id>` | Set in `.firebaserc` and `firebase use` |
+| Firebase project number | `<your-project-number>` | Visible in your own `google-services.json` after setup |
 | Functions region | `asia-south1` | Keep — pinned in `firebase.json` |
 | Realtime DB region | `asia-southeast1` | Keep — match this when creating your RTDB instance |
 | Android package name | `com.nightlife.auraapp` | Keep, or change in `aura/android/app/build.gradle` `applicationId` |
