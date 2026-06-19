@@ -1,24 +1,24 @@
 # AURA
 
 > Real-time nightlife intelligence for India.
-> Know what's happening at venues *right now*, earn instant UPI rewards for posting live updates.
+> Know what's happening at venues *right now*, earn venue rewards for posting live updates.
 
 🌐 **Website:** [nightlifeaura.com](https://nightlifeaura.com/)
 
-AURA solves the **pre-nightlife decision problem** — the 8–11 PM window when people are deciding where to go out. Instead of stale, post-event social proof, AURA surfaces what's happening at venues *right now* through user-submitted live signals, and rewards contributors with instant UPI cash.
+AURA solves the **pre-nightlife decision problem** — the 8–11 PM window when people are deciding where to go out. Instead of stale, post-event social proof, AURA surfaces what's happening at venues *right now* through user-submitted live signals, and rewards contributors with venue-defined rewards — each venue chooses what to offer (a free drink, cover charge waived, a discount, loyalty perks, or a cash payout).
 
 A full-stack product across two surfaces: a **React Native** app (iOS + Android, consumer + venue-admin) and a **Firebase** backend (38 Cloud Functions, Firestore, Realtime DB, Storage, FCM), targeting Mumbai for beta.
 
 ### Highlights
 
 - 📍 **Geofenced check-ins** — server-side haversine validation rejects fake check-ins
-- 💸 **Instant UPI rewards** — Razorpay Payout integration with a privacy-by-design payout flow
+- 🎁 **Venue-based rewards** — each venue chooses the reward for a verified post (perk, discount, or cash payout); privacy-by-design payout flow
 - 🔴 **Live venue state** — weighted live-score from user signals, auto-expiring updates
 - 🗺️ **Venue discovery** — Google Places-backed catalogue with vibe tags + ranked listings
 - ⚙️ **Event ingestion pipeline** — multi-source scrape → normalize → dedupe → venue-match → publish
 - 🛡️ **Security-first** — role-based access, least-privilege Firestore/Storage/RTDB rules, unit-tested validators
 
-> **Status:** Beta-ready. UPI payouts and live event scraping are code-complete but gated behind feature flags pending production credentials / proxy infrastructure (see [§ What's done vs Phase 2](#whats-done-vs-phase-2)).
+> **Status:** Beta-ready. Reward payouts and live event scraping are code-complete but gated behind feature flags pending production credentials / proxy infrastructure (see [§ What's done vs Phase 2](#whats-done-vs-phase-2)).
 
 ---
 
@@ -339,7 +339,7 @@ For real-SMS OTP, you need the app uploaded to Play Console at least once on an 
 - Cloud Storage (videos + thumbnails)
 - Cloud Messaging (FCM push)
 - Google Places API (venue discovery)
-- Razorpay Payout API (UPI disbursements — wired but disabled, Phase 2 enable)
+- Razorpay Payout API (cash-reward disbursements for venues that choose a cash reward — wired but disabled, Phase 2 enable)
 
 **Tooling**
 - TypeScript strict mode in both packages
@@ -368,8 +368,9 @@ Major flows:
 
 3. **Check-in + reward** (`ClaimRewardScreen` → `validateContribution` → `processUpiPayout`)
    - 3-step session: GPS verify → first clip → second clip after 30-min cooldown → redemption code
+   - The reward itself is venue-defined — each venue chooses what to offer (a perk/discount redeemed in-venue via the redemption code, or a cash payout)
    - Reward record written to `/rewards/{id}` with `status: 'pending'`
-   - `processUpiPayout` Firestore trigger (disabled until Razorpay credentials configured) reads `/users/{uid}.upiId`, calls Razorpay Payouts API, updates reward to `'paid'` or `'failed'`
+   - For cash rewards, the `processUpiPayout` Firestore trigger (disabled until Razorpay credentials configured) reads `/users/{uid}.upiId`, calls Razorpay Payouts API, updates reward to `'paid'` or `'failed'`
    - UPI ID is never persisted on `/rewards` for privacy — only `payoutId` + `utr` reference
 
 4. **Event scraping** (scheduled `scrapeTonightEvents` → normalize → dedupe → match → publish)
@@ -454,7 +455,7 @@ Quick summary of what's NOT done and needs to be picked up:
 
 | Phase 2 item | What to do |
 |---|---|
-| **Enable UPI payouts** | Get Razorpay creds, `firebase functions:secrets:set RAZORPAY_KEY_ID/KEY_SECRET/ACCOUNT_NUMBER`, uncomment `processUpiPayout` export in `functions/src/index.ts`, deploy, payout pilot |
+| **Enable cash-reward payouts** | Get Razorpay creds, `firebase functions:secrets:set RAZORPAY_KEY_ID/KEY_SECRET/ACCOUNT_NUMBER`, uncomment `processUpiPayout` export in `functions/src/index.ts`, deploy, payout pilot |
 | **Play Store submission** | Generate release keystore, internal testing track, screenshots, App Privacy answers, Play Console listing |
 | **App Store submission** | Apple Developer Program ($99/yr), TestFlight, App Store Connect listing |
 | **Scraper unblock** | Eventbrite token (free, easy) or residential proxy provider (paid, BMS/Insider) |
@@ -473,7 +474,7 @@ Quick summary of what's NOT done and needs to be picked up:
 
 | Item | Where it lives | Why you need it |
 |---|---|---|
-| Razorpay merchant credentials | Razorpay dashboard | Configure UPI payouts (Phase 2) |
+| Razorpay merchant credentials | Razorpay dashboard | Configure cash-reward payouts (Phase 2) |
 | Google Play Console access | Play Developer Console | Upload APK to Play Store (Phase 2) |
 | Apple Developer Team access | App Store Connect | iOS distribution (Phase 2) |
 | Domain access for `auraapp.in` (or replacement) | wherever client hosts DNS | Privacy + terms pages |
