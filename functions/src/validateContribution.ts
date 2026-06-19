@@ -1,18 +1,6 @@
-/**
- * validateContribution — atomic check-in + reward creation.
- *
- * Called from ClaimRewardScreen after GPS is confirmed client-side.
- * The client sends { venueId, upiId, userLat, userLng } in a single call.
- *
- * Server steps:
- *   1. Geofence — user must be within venue radius
- *   2. Daily rate-limit — max MAX_PER_DAY verified check-ins per user per day
- *   3. Per-venue nightly limit — max MAX_PER_VENUE per user per venue per night
- *   4. Create /checkins/{id} as verified=true (payout-ready)
- *   5. Create /rewards/{id} with UPI ID and status='pending'
- *
- * Payout is executed by processUpiPayout (Phase 4, triggered on reward create).
- */
+// Atomic check-in + reward creation. Client sends GPS + venue after a contribution;
+// we re-check the geofence and rate limits here (never trust the client) then write
+// a verified checkin and a pending reward. Payout itself is processUpiPayout's job.
 import { onCall, HttpsError } from 'firebase-functions/v2/https';
 import { getFirestore, FieldValue, Timestamp } from 'firebase-admin/firestore';
 import type { VenueDoc } from './types';

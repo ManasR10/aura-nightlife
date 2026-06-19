@@ -1,18 +1,8 @@
-/**
- * Camera permission + launch helpers used by CameraScreen and RecordVideoScreen.
- *
- * `react-native-image-picker` requests CAMERA + RECORD_AUDIO internally on
- * Android, but the result is silently swallowed if the user has previously
- * denied and selected "Don't ask again". On iOS the system handles this via
- * Info.plist usage descriptions.
- *
- * This wrapper:
- *   1. Triggers an explicit PermissionsAndroid request so the OS dialog fires
- *      reliably the first time a user opens the camera in a release build.
- *   2. Translates a launchCamera response into a single discriminated union
- *      so callers can render a clear error message instead of "nothing
- *      happens" when something goes wrong.
- */
+// Camera permission + launch helpers for CameraScreen / RecordVideoScreen.
+// image-picker asks for CAMERA/RECORD_AUDIO itself, but on Android that request is
+// silently dropped if the user previously hit "Don't ask again", so we fire an
+// explicit PermissionsAndroid request first and hand back a tagged result the
+// caller can turn into a real error message.
 import { Alert, PermissionsAndroid, Platform } from 'react-native';
 import {
   launchCamera,

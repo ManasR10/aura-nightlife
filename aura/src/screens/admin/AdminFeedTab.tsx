@@ -1,18 +1,6 @@
-/**
- * AdminFeedTab — venue operator's video feed.
- *
- * Sub-tabs:
- *   Guest Posts  — videos posted by users (sourceType: 'user') at this venue
- *   Our Posts    — videos posted by the venue admin (sourceType: 'admin')
- *
- * Filters:
- *   Tonight   — last 18 h, sorted newest first
- *   This Week — last 7 days, sorted most-viewed first
- *   All Time  — all signals, sorted most-viewed first
- *
- * Tap any thumbnail → full-screen video player modal.
- * Viewing a video increments its viewCount (only field admins can update).
- */
+// Venue operator's video feed. Two sub-tabs (guest posts vs the venue's own posts),
+// filtered by Tonight / This Week / All Time. Tapping a thumbnail opens the
+// full-screen player and bumps viewCount — the one field admins are allowed to write.
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,

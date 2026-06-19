@@ -1,17 +1,7 @@
-/**
- * AuthProvider — owns auth state only.
- *
- * Responsibilities:
- *   - Firebase auth state listener
- *   - authUser / userDoc / venueAdminDoc / initializing state
- *   - Splash timeout safety net
- *   - Thin context methods that delegate to auth/userService and then
- *     update local state
- *
- * Business logic (Firebase calls, Firestore writes) lives in:
- *   src/services/auth.ts
- *   src/services/userService.ts
- */
+// Holds auth state only: the Firebase auth listener, the
+// authUser/userDoc/venueAdminDoc/initializing values, and a splash timeout safety
+// net. The real Firebase/Firestore work lives in services/auth.ts and
+// services/userService.ts — the context methods just delegate and update state.
 import React, { createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import auth, { type FirebaseAuthTypes } from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';

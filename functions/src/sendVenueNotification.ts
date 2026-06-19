@@ -1,18 +1,7 @@
-/**
- * sendVenueNotification — admin-triggered push notification to users.
- *
- * Free mode:  push to users who have saved this venue
- *             (up to 1 free notification per venue per night, resets at 03:30 IST)
- *
- * Boost mode: push to saved users + users who checked in at this venue in the
- *             last 30 days (regulars/recent visitors — best proxy for nearby
- *             without real-time GPS tracking)
- *             Rate-limited by the caller paying; no nightly cap.
- *
- * FCM tokens come from /users/{uid}.fcmToken — set by the app on login.
- * We skip blank or duplicate tokens and soft-fail per-token errors so one bad
- * token doesn't kill the whole batch.
- */
+// Admin-triggered push. Free mode notifies users who saved the venue (1/night,
+// resets 03:30 IST); boost mode also hits anyone who checked in here in the last
+// 30 days. Blank/duplicate tokens are skipped and per-token errors soft-fail so one
+// dead FCM token doesn't sink the whole batch.
 import { onCall, HttpsError } from 'firebase-functions/v2/https';
 import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 import { getMessaging } from 'firebase-admin/messaging';

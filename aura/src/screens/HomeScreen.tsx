@@ -1,21 +1,7 @@
-/**
- * HomeScreen — vibe-first discovery hub.
- *
- * Layout (matches Lovable NewHome):
- *   1. Header — Aura · Mumbai · live count badge
- *   2. Hero banner carousel (auto-scrolls, venue ads go here)
- *   3. Dots indicator
- *   4. "What's Your Aura?" vibe grid
- *
- * Tapping a vibe → calls onVibeSelect(auraId) → parent switches to Explore
- * tab with that vibe pre-filtered. No venue list lives here.
- *
- * Banners:
- *   Loaded from Firestore /banners where active==true, ordered by priority.
- *   Falls back to PLACEHOLDER_BANNERS when collection is empty.
- *   To add a real venue banner, create a doc in /banners with BannerItem shape
- *   and set active: true via Firebase Console or Admin SDK.
- */
+// Vibe-first discovery hub: header, hero banner carousel, and the "What's Your
+// Aura?" grid. Tapping a vibe hands off to the Explore tab pre-filtered — no venue
+// list lives here. Banners load from /banners (active==true, by priority) and fall
+// back to PLACEHOLDER_BANNERS when the collection is empty.
 import React, { useEffect, useRef, useState } from 'react';
 import {
   Dimensions,

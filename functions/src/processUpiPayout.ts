@@ -1,17 +1,7 @@
-/**
- * processUpiPayout — triggered by a Firestore write on /rewards/{rewardId}
- * with status = "pending". Calls the Razorpay Payout API and updates the
- * reward document to "paid" or "failed".
- *
- * Secrets are loaded via firebase-functions defineSecret. Configure with:
- *   firebase functions:secrets:set RAZORPAY_KEY_ID
- *   firebase functions:secrets:set RAZORPAY_KEY_SECRET
- *   firebase functions:secrets:set RAZORPAY_ACCOUNT_NUMBER
- *
- * The user's UPI ID is never persisted to the reward document — only the
- * Razorpay payout reference (payoutId/utr) is stored, so a compromised
- * venue admin cannot enumerate UPI IDs from /rewards.
- */
+// Pays out a reward once a /rewards doc lands with status 'pending'. Razorpay keys
+// come from defineSecret. Only the payout reference (payoutId/utr) is written back
+// onto the reward, never the user's UPI ID — don't want /rewards turning into a
+// dump of everyone's UPI handles if an admin account is ever compromised.
 import { onDocumentCreated } from 'firebase-functions/v2/firestore';
 import { defineSecret } from 'firebase-functions/params';
 import { getFirestore, FieldValue } from 'firebase-admin/firestore';

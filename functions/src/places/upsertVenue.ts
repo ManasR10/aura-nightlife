@@ -1,29 +1,7 @@
-/**
- * upsertVenue — writes or refreshes a venue in Firestore /venues/{placeId}.
- *
- * Called internally by searchNearbyVenues, searchVenuesByText, refreshVenueDetails.
- * Never exposed directly as a callable — the API key stays server-side.
- *
- *  Venue data layer ownership
- *
- *  Google-owned (this file writes, { merge: true } safe to overwrite)
- *    name, address, location, rating, userRatingCount, types, priceLevel,
- *    isOpen, currentOpeningHours, phone, website, photos
- *
- *  Aura-derived (seedMumbaiVenueCatalogue writes, re-derived on re-seed)
- *    city, zone, nightlifeCategory, vibeTags, discoveryPriority
- *    → Re-derived only if admin has NOT set adminVibeTags
- *    → discoveryPriority: seed value used unless admin overrides
- *
- *  Admin-owned (adminUpdateVenue writes, NEVER overwritten by Google/seed layer)
- *    openingNote, promotions, bannerUrl, instagramHandle,
- *    adminVibeTags, discoveryEnabled, coverCharge, dressCode, ageLimit
- *
- *  Aura-ops (internal tooling only)
- *    discoveryEnabled override, curation flags
- *
- * Rule: always use { merge: true } so admin-owned fields survive re-fetches.
- */
+// Writes/refreshes a venue at /venues/{placeId}. Internal only (searchNearbyVenues,
+// searchVenuesByText, refreshVenueDetails) so the Places key never leaves the server.
+// Always merge:true — otherwise a Google/seed refresh clobbers admin-owned fields
+// like promotions, coverCharge, dressCode, adminVibeTags.
 import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 import type { VenueDoc } from '../types';
 

@@ -1,23 +1,7 @@
-/**
- * scrapeTonightEvents — scheduled Cloud Function.
- *
- * Priority order (per product plan):
- *   Layer 1 (primary):   BookMyShow, District
- *   Layer 2 (official):  Eventbrite API, Ticketmaster Discovery API
- *   Layer 3 (fallback):  Insider, Timeout
- *
- * Pipeline:
- *   Scrape → save raw → normalize → dedupe → match venue → publish → expire old
- *
- * Schedule:
- *   Every 60 min normally; high-frequency window (Fri/Sat/Sun ≥16:00 IST) already
- *   at 60 min — upgrade to 30 min via Cloud Scheduler if needed post-launch.
- *
- * Secrets required:
- *   PLACES_API_KEY       — Google Places API (venue matching)
- *   EVENTBRITE_TOKEN     — Eventbrite API (optional, graceful skip if missing)
- *   TICKETMASTER_KEY     — Ticketmaster Discovery API (optional, graceful skip)
- */
+// Hourly scrape of what's on tonight. BMS + District are primary, Eventbrite +
+// Ticketmaster are official APIs (skipped when their token isn't set), Insider +
+// Timeout are fallbacks. Results get normalized, deduped, matched to a venue and
+// published. Needs PLACES_API_KEY.
 import { onSchedule } from 'firebase-functions/v2/scheduler';
 import { scrapeBookMyShow }   from '../scrapers/bookmyshow';
 import { scrapeDistrict }     from '../scrapers/district';

@@ -1,16 +1,7 @@
-/**
- * aggregateVenueAnalytics — scheduled Cloud Function.
- *
- * Runs at 1 AM IST daily. Reads raw analyticsEvents for the previous day,
- * groups by venue, and writes a summary doc to:
- *   /venueAnalyticsDaily/{venueId}_{YYYY-MM-DD}
- *
- * On Mondays it also rolls up the past 7 days into:
- *   /venueAnalyticsWeekly/{venueId}_{weekStart}
- *
- * This keeps the admin dashboard queries O(1) — single doc reads, never
- * scanning raw event collections at query time.
- */
+// Daily 1 AM IST rollup: reads yesterday's analyticsEvents, groups by venue, writes
+// /venueAnalyticsDaily/{venueId}_{date}. Mondays also roll the week into
+// /venueAnalyticsWeekly. Keeps the admin dashboard to single-doc reads instead of
+// scanning raw events on every query.
 import { onSchedule } from 'firebase-functions/v2/scheduler';
 import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 import type { VenueAnalyticsDailyDoc, VenueAnalyticsWeeklyDoc } from '../types';

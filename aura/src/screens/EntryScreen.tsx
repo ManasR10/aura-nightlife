@@ -1,17 +1,7 @@
-/**
- * EntryScreen — orchestrates the login/signup state machine and delegates
- * each sub-flow to a presentational component under components/auth/.
- *
- * Login mode:
- *   "Continue with Phone"  → phone OTP flow
- *   "Continue with Google" → Google sign-in
- *   Email + password inline → Log In / Forgot password
- *   "Not on Aura yet? Create account" toggle
- *   "Venue operator? Admin login →"
- *
- * Signup mode (4-step progress bar):
- *   1. Name  2. Birthday + Gender (MIN_AGE gate)  3. Phone  4. OTP
- */
+// Login/signup state machine. Each sub-flow is delegated to a presentational
+// component under components/auth/. Login offers phone OTP, Google, and inline
+// email/password; signup is a 4-step flow (name -> birthday+gender age gate ->
+// phone -> OTP).
 import React, { useRef, useState } from 'react';
 import {
   Keyboard,

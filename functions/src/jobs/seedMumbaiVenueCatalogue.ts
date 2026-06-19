@@ -1,16 +1,7 @@
-/**
- * seedMumbaiVenueCatalogue — callable that populates /venues with Mumbai
- * nightlife spots across all major zones.
- *
- * For each zone it calls the Places API (New) Nearby Search for
- * bars + night_clubs, deduplicates by placeId, derives discovery metadata
- * (zone, nightlifeCategory, vibeTags, discoveryPriority), then upserts to
- * /venues using merge so admin-enriched fields are preserved.
- *
- * Invoke once from the Firebase Console or CLI:
- *   firebase functions:call seedMumbaiVenueCatalogue
- * Safe to re-run — all upserts are idempotent via { merge: true }.
- */
+// One-off callable that fills /venues with Mumbai nightlife spots. Per zone it runs
+// a Places Nearby Search for bars + night_clubs, dedupes by placeId, derives the
+// discovery metadata, and upserts with merge so admin edits survive. Safe to re-run:
+// firebase functions:call seedMumbaiVenueCatalogue
 import { onCall, HttpsError } from 'firebase-functions/v2/https';
 import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 

@@ -1,18 +1,6 @@
-/**
- * claimSessionReward — evaluates eligibility server-side and creates an
- * immutable RewardClaim record.
- *
- * Checks:
- *  1. Session exists and is at level 3 / unlocked
- *  2. Venue's active reward exists (falls back to platform reward, then default)
- *  3. Current time is within the reward's activeWindow (if set)
- *  4. Total nightly cap not exceeded (limits.maxClaimsPerNight)
- *  5. Daily cash budget not exceeded (limits.dailyBudgetINR, cash type only)
- *  6. Per-user per-night limit not exceeded (limits.perUserPerNight)
- *
- * On success writes to /rewardClaims (immutable snapshot) and updates the
- * session. Increments venueRewards.claimCount transactionally via batch.
- */
+// Server-side reward eligibility + an immutable claim record. Checks the session is
+// unlocked and the venue reward's window / nightly cap / daily budget / per-user
+// limit all pass, then writes /rewardClaims and bumps claimCount in one batch.
 import { onCall, HttpsError } from 'firebase-functions/v2/https';
 import { getFirestore, Timestamp } from 'firebase-admin/firestore';
 import { getNightKey } from './nightKey';
