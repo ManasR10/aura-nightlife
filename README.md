@@ -22,11 +22,34 @@ A full-stack product across two surfaces: a **React Native** app (iOS + Android,
 
 ---
 
-## Screenshots
+## App preview
 
-| | | | |
-|---|---|---|---|
-| ![AURA screenshot 1](docs/ss/aura-1.png) | ![AURA screenshot 2](docs/ss/aura-2.png) | ![AURA screenshot 3](docs/ss/aura-3.png) | ![AURA screenshot 4](docs/ss/aura-4.png) |
+<p align="center">
+  <img
+    src="docs/ss/aura-2.png"
+    width="30%"
+    alt="AURA home screen showing nightlife vibe selection"
+  />
+  &nbsp;
+  <img
+    src="docs/ss/aura-3.png"
+    width="30%"
+    alt="AURA venue discovery and filtering screen"
+  />
+  &nbsp;
+  <img
+    src="docs/ss/aura-4.png"
+    width="30%"
+    alt="AURA profile, check-in progress and rewards screen"
+  />
+</p>
+
+<p align="center">
+  <em>
+    Discover venues by vibe, explore nearby nightlife, save places,
+    submit live updates, complete verified check-ins and earn venue rewards.
+  </em>
+</p>
 
 ---
 
@@ -59,20 +82,20 @@ xs/
 
 ## Prerequisites
 
-| Tool | Version | Notes |
-|---|---|---|
-| Node.js | 22.x | Required by Firebase Functions runtime |
-| npm | 10.x | Comes with Node 22 |
-| Ruby | 3.x | iOS CocoaPods install |
-| Bundler | 2.x | `gem install bundler` |
-| Xcode | ≥ 15 | iOS builds, macOS only |
-| Android Studio | latest stable | Android builds + emulator |
-| JDK | 17 | Required by AGP |
-| Firebase CLI | latest | `npm i -g firebase-tools` |
-| Google Cloud SDK | latest | `brew install --cask google-cloud-sdk` — needed for some GCP ops |
-| gh (optional) | latest | `brew install gh` — GitHub repo management |
-| `keytool` | bundled with JDK | Generates SHA fingerprints |
-| `adb` | bundled with Android Studio | Device debugging |
+| Tool             | Version                     | Notes                                                            |
+| ---------------- | --------------------------- | ---------------------------------------------------------------- |
+| Node.js          | 22.x                        | Required by Firebase Functions runtime                           |
+| npm              | 10.x                        | Comes with Node 22                                               |
+| Ruby             | 3.x                         | iOS CocoaPods install                                            |
+| Bundler          | 2.x                         | `gem install bundler`                                            |
+| Xcode            | ≥ 15                        | iOS builds, macOS only                                           |
+| Android Studio   | latest stable               | Android builds + emulator                                        |
+| JDK              | 17                          | Required by AGP                                                  |
+| Firebase CLI     | latest                      | `npm i -g firebase-tools`                                        |
+| Google Cloud SDK | latest                      | `brew install --cask google-cloud-sdk` — needed for some GCP ops |
+| gh (optional)    | latest                      | `brew install gh` — GitHub repo management                       |
+| `keytool`        | bundled with JDK            | Generates SHA fingerprints                                       |
+| `adb`            | bundled with Android Studio | Device debugging                                                 |
 
 ---
 
@@ -461,18 +484,18 @@ The aura job provisions a placeholder `env.ts` (from `env.example.ts`) so the ty
 
 Quick summary of what's NOT done and needs to be picked up:
 
-| Phase 2 item | What to do |
-|---|---|
-| **Enable cash-reward payouts** | Get Razorpay creds, `firebase functions:secrets:set RAZORPAY_KEY_ID/KEY_SECRET/ACCOUNT_NUMBER`, uncomment `processUpiPayout` export in `functions/src/index.ts`, deploy, payout pilot |
-| **Play Store submission** | Generate release keystore, internal testing track, screenshots, App Privacy answers, Play Console listing |
-| **App Store submission** | Apple Developer Program ($99/yr), TestFlight, App Store Connect listing |
-| **Scraper unblock** | Eventbrite token (free, easy) or residential proxy provider (paid, BMS/Insider) |
-| **In-app payment flow** | BookingModal / VIPOptionsModal / PayViaAuraModal are UI shells; wire to Razorpay Standard Checkout |
-| **Founder analytics dashboard** | `/analyticsEvents` is being captured + rolled up daily/weekly; build a web dashboard or use Looker Studio |
-| **Web admin portal** | All admin functions currently inside the RN app; web version is a separate build |
-| **Background scraper job** | Set up Cloud Scheduler in a non-GCP region, or use Cloud Run with VPC connector to a residential proxy |
-| **Push notification ops UI** | FCM is wired; campaign UI for marketing is not built |
-| **Integration tests for Cloud Functions** | Pure validators covered with 31 unit tests; handler tests against Firestore emulator are TODO |
+| Phase 2 item                              | What to do                                                                                                                                                                            |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Enable cash-reward payouts**            | Get Razorpay creds, `firebase functions:secrets:set RAZORPAY_KEY_ID/KEY_SECRET/ACCOUNT_NUMBER`, uncomment `processUpiPayout` export in `functions/src/index.ts`, deploy, payout pilot |
+| **Play Store submission**                 | Generate release keystore, internal testing track, screenshots, App Privacy answers, Play Console listing                                                                             |
+| **App Store submission**                  | Apple Developer Program ($99/yr), TestFlight, App Store Connect listing                                                                                                               |
+| **Scraper unblock**                       | Eventbrite token (free, easy) or residential proxy provider (paid, BMS/Insider)                                                                                                       |
+| **In-app payment flow**                   | BookingModal / VIPOptionsModal / PayViaAuraModal are UI shells; wire to Razorpay Standard Checkout                                                                                    |
+| **Founder analytics dashboard**           | `/analyticsEvents` is being captured + rolled up daily/weekly; build a web dashboard or use Looker Studio                                                                             |
+| **Web admin portal**                      | All admin functions currently inside the RN app; web version is a separate build                                                                                                      |
+| **Background scraper job**                | Set up Cloud Scheduler in a non-GCP region, or use Cloud Run with VPC connector to a residential proxy                                                                                |
+| **Push notification ops UI**              | FCM is wired; campaign UI for marketing is not built                                                                                                                                  |
+| **Integration tests for Cloud Functions** | Pure validators covered with 31 unit tests; handler tests against Firestore emulator are TODO                                                                                         |
 
 ---
 
@@ -480,14 +503,14 @@ Quick summary of what's NOT done and needs to be picked up:
 
 > The Firebase + GCP project referenced in this codebase is on the original developer's account and is not being transferred — you spin up your own (see the note at the top of [§ First-time setup](#first-time-setup)).
 
-| Item | Where it lives | Why you need it |
-|---|---|---|
-| Razorpay merchant credentials | Razorpay dashboard | Configure cash-reward payouts (Phase 2) |
-| Google Play Console access | Play Developer Console | Upload APK to Play Store (Phase 2) |
-| Apple Developer Team access | App Store Connect | iOS distribution (Phase 2) |
-| Domain access for `auraapp.in` (or replacement) | wherever client hosts DNS | Privacy + terms pages |
-| Eventbrite Platform API token (if pursuing) | Eventbrite developer console | Unblock event scraping |
-| List of beta tester phone numbers | from the client | Add as test numbers in your own Firebase Auth |
+| Item                                            | Where it lives               | Why you need it                               |
+| ----------------------------------------------- | ---------------------------- | --------------------------------------------- |
+| Razorpay merchant credentials                   | Razorpay dashboard           | Configure cash-reward payouts (Phase 2)       |
+| Google Play Console access                      | Play Developer Console       | Upload APK to Play Store (Phase 2)            |
+| Apple Developer Team access                     | App Store Connect            | iOS distribution (Phase 2)                    |
+| Domain access for `auraapp.in` (or replacement) | wherever client hosts DNS    | Privacy + terms pages                         |
+| Eventbrite Platform API token (if pursuing)     | Eventbrite developer console | Unblock event scraping                        |
+| List of beta tester phone numbers               | from the client              | Add as test numbers in your own Firebase Auth |
 
 ---
 
@@ -495,14 +518,14 @@ Quick summary of what's NOT done and needs to be picked up:
 
 Bundle IDs are baked into the codebase. The Firebase project values are per-developer — create your own project and plug in your values.
 
-| Used by | Value | Your action |
-|---|---|---|
-| Firebase project ID | `<your-project-id>` | Set in `.firebaserc` and `firebase use` |
-| Firebase project number | `<your-project-number>` | Visible in your own `google-services.json` after setup |
-| Functions region | `asia-south1` | Keep — pinned in `firebase.json` |
-| Realtime DB region | `asia-southeast1` | Keep — match this when creating your RTDB instance |
-| Android package name | `com.nightlife.auraapp` | Keep, or change in `aura/android/app/build.gradle` `applicationId` |
-| iOS bundle identifier | `com.nightlife.auraapp` | Keep, or change in `aura/ios/aura/Info.plist` |
+| Used by                 | Value                   | Your action                                                        |
+| ----------------------- | ----------------------- | ------------------------------------------------------------------ |
+| Firebase project ID     | `<your-project-id>`     | Set in `.firebaserc` and `firebase use`                            |
+| Firebase project number | `<your-project-number>` | Visible in your own `google-services.json` after setup             |
+| Functions region        | `asia-south1`           | Keep — pinned in `firebase.json`                                   |
+| Realtime DB region      | `asia-southeast1`       | Keep — match this when creating your RTDB instance                 |
+| Android package name    | `com.nightlife.auraapp` | Keep, or change in `aura/android/app/build.gradle` `applicationId` |
+| iOS bundle identifier   | `com.nightlife.auraapp` | Keep, or change in `aura/ios/aura/Info.plist`                      |
 
 ---
 
