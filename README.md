@@ -22,6 +22,14 @@ A full-stack product across two surfaces: a **React Native** app (iOS + Android,
 
 ---
 
+## Screenshots
+
+| | | | |
+|---|---|---|---|
+| ![AURA screenshot 1](docs/ss/aura-1.png) | ![AURA screenshot 2](docs/ss/aura-2.png) | ![AURA screenshot 3](docs/ss/aura-3.png) | ![AURA screenshot 4](docs/ss/aura-4.png) |
+
+---
+
 ## Repository layout
 
 ```
